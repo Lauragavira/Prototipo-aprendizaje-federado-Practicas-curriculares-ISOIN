@@ -1,0 +1,151 @@
+id_reparto,distribuidor_id,fecha,dia_semana,centro_destino,zona_origen,hora_salida,hora_salida_min,distancia_km,numero_entregas,peso_total_kg,trafico,clima,duracion_estimada_min,hora_llegada_estimada,hora_llegada_estimada_min,retraso_min,duracion_real_min,hora_llegada_real,hora_llegada_real_min,puntual
+R0001,D1,2026-01-05,lunes,ISOIN_Sevilla,Nervion,07:30,450,9.2,5,218.1,medio,lluvia,52,08:22,502,22,74,08:44,524,no
+R0002,D1,2026-01-05,lunes,ISOIN_Sevilla,Nervion,08:20,500,14.1,3,176.9,alto,nublado,74,09:34,574,27,101,10:01,601,no
+R0003,D1,2026-01-05,lunes,ISOIN_Sevilla,Alcala de Guadaira,15:00,900,18.9,5,209.1,medio,soleado,77,16:17,977,6,83,16:23,983,no
+R0004,D1,2026-01-06,martes,ISOIN_Sevilla,Nervion,09:40,580,16.0,15,55.2,medio,soleado,90,11:10,670,13,103,11:23,683,no
+R0005,D1,2026-01-06,martes,ISOIN_Sevilla,San Pablo,15:40,940,15.5,14,61.3,medio,nublado,82,17:02,1022,11,93,17:13,1033,no
+R0006,D1,2026-01-06,martes,ISOIN_Sevilla,Torreblanca,13:40,820,7.6,8,94.2,medio,lluvia,54,14:34,874,24,78,14:58,898,no
+R0007,D1,2026-01-07,miercoles,ISOIN_Sevilla,Sevilla Este,08:50,530,11.7,13,206.7,medio,soleado,71,10:01,601,11,82,10:12,612,no
+R0008,D1,2026-01-07,miercoles,ISOIN_Sevilla,Alcala de Guadaira,10:30,630,5.8,12,250.9,bajo,nublado,54,11:24,684,17,71,11:41,701,no
+R0009,D1,2026-01-07,miercoles,ISOIN_Sevilla,Sevilla Este,08:30,510,18.7,9,256.0,medio,soleado,81,09:51,591,18,99,10:09,609,no
+R0010,D1,2026-01-08,jueves,ISOIN_Sevilla,Nervion,08:15,495,19.5,9,185.2,medio,soleado,88,09:43,583,17,105,10:00,600,no
+R0011,D1,2026-01-08,jueves,ISOIN_Sevilla,Nervion,13:10,790,17.5,11,221.5,alto,soleado,94,14:44,884,22,116,15:06,906,no
+R0012,D1,2026-01-08,jueves,ISOIN_Sevilla,Nervion,13:30,810,23.0,15,87.0,alto,nublado,113,15:23,923,31,144,15:54,954,no
+R0013,D1,2026-01-09,viernes,ISOIN_Sevilla,San Pablo,15:00,900,15.9,10,49.6,alto,nublado,88,16:28,988,11,99,16:39,999,no
+R0014,D1,2026-01-09,viernes,ISOIN_Sevilla,San Pablo,07:10,430,18.4,4,274.8,medio,soleado,76,08:26,506,19,95,08:45,525,no
+R0015,D1,2026-01-09,viernes,ISOIN_Sevilla,San Pablo,10:20,620,22.1,15,216.5,bajo,soleado,94,11:54,714,17,111,12:11,731,no
+R0016,D1,2026-01-10,sabado,ISOIN_Sevilla,Sevilla Este,08:10,490,10.9,12,175.2,medio,soleado,67,09:17,557,6,73,09:23,563,no
+R0017,D1,2026-01-10,sabado,ISOIN_Sevilla,Alcala de Guadaira,07:20,440,9.8,10,95.3,bajo,lluvia,62,08:22,502,18,80,08:40,520,no
+R0018,D1,2026-01-10,sabado,ISOIN_Sevilla,Sevilla Este,15:50,950,19.8,6,67.2,medio,soleado,82,17:12,1032,13,95,17:25,1045,no
+R0019,D1,2026-01-12,lunes,ISOIN_Sevilla,Nervion,07:45,465,18.3,15,247.5,bajo,soleado,88,09:13,553,11,99,09:24,564,no
+R0020,D1,2026-01-12,lunes,ISOIN_Sevilla,Torreblanca,08:10,490,12.9,11,68.0,alto,soleado,80,09:30,570,14,94,09:44,584,no
+R0021,D1,2026-01-12,lunes,ISOIN_Sevilla,Sevilla Este,10:50,650,13.6,9,257.1,bajo,soleado,66,11:56,716,8,74,12:04,724,no
+R0022,D1,2026-01-12,lunes,ISOIN_Sevilla,Torreblanca,09:45,585,17.7,14,278.9,medio,nublado,88,11:13,673,16,104,11:29,689,no
+R0023,D1,2026-01-12,lunes,ISOIN_Sevilla,San Pablo,07:40,460,5.6,12,157.0,alto,soleado,65,08:45,525,25,90,09:10,550,no
+R0024,D1,2026-01-12,lunes,ISOIN_Sevilla,Sevilla Este,07:10,430,17.3,6,139.9,alto,soleado,89,08:39,519,16,105,08:55,535,no
+R0025,D1,2026-01-13,martes,ISOIN_Sevilla,San Pablo,07:45,465,17.0,12,167.9,alto,soleado,96,09:21,561,23,119,09:44,584,no
+R0026,D1,2026-01-13,martes,ISOIN_Sevilla,Sevilla Este,13:30,810,13.2,15,264.9,bajo,nublado,79,14:49,889,7,86,14:56,896,no
+R0027,D1,2026-01-13,martes,ISOIN_Sevilla,San Pablo,09:15,555,22.2,4,251.6,medio,soleado,86,10:41,641,16,102,10:57,657,no
+R0028,D1,2026-01-14,miercoles,ISOIN_Sevilla,Alcala de Guadaira,13:10,790,22.3,5,107.1,alto,nublado,92,14:42,882,26,118,15:08,908,no
+R0029,D1,2026-01-14,miercoles,ISOIN_Sevilla,Alcala de Guadaira,08:30,510,14.1,7,257.8,alto,soleado,81,09:51,591,13,94,10:04,604,no
+R0030,D1,2026-01-14,miercoles,ISOIN_Sevilla,Alcala de Guadaira,15:15,915,16.6,7,83.0,bajo,nublado,71,16:26,986,0,71,16:26,986,si
+R0031,D1,2026-01-15,jueves,ISOIN_Sevilla,Nervion,13:15,795,14.9,8,181.9,bajo,soleado,65,14:20,860,1,66,14:21,861,si
+R0032,D1,2026-01-15,jueves,ISOIN_Sevilla,Nervion,09:20,560,17.5,13,69.2,alto,lluvia,99,10:59,659,37,136,11:36,696,no
+R0033,D1,2026-01-15,jueves,ISOIN_Sevilla,Sevilla Este,15:15,915,21.2,3,87.1,alto,nublado,90,16:45,1005,28,118,17:13,1033,no
+R0034,D1,2026-01-16,viernes,ISOIN_Sevilla,Nervion,10:00,600,20.8,6,91.9,alto,soleado,91,11:31,691,16,107,11:47,707,no
+R0035,D1,2026-01-16,viernes,ISOIN_Sevilla,Sevilla Este,10:40,640,9.8,4,272.2,bajo,nublado,48,11:28,688,14,62,11:42,702,no
+R0036,D1,2026-01-16,viernes,ISOIN_Sevilla,Nervion,07:30,450,7.9,7,54.0,medio,soleado,56,08:26,506,6,62,08:32,512,no
+R0037,D1,2026-01-17,sabado,ISOIN_Sevilla,Torreblanca,12:20,740,9.3,14,147.5,medio,nublado,70,13:30,810,18,88,13:48,828,no
+R0038,D1,2026-01-17,sabado,ISOIN_Sevilla,Alcala de Guadaira,12:40,760,17.1,4,214.1,bajo,soleado,64,13:44,824,6,70,13:50,830,no
+R0039,D1,2026-01-17,sabado,ISOIN_Sevilla,Alcala de Guadaira,12:15,735,8.1,13,266.0,medio,lluvia,72,13:27,807,39,111,14:06,846,no
+R0040,D1,2026-01-19,lunes,ISOIN_Sevilla,Nervion,09:30,570,8.5,15,181.3,alto,soleado,84,10:54,654,29,113,11:23,683,no
+R0041,D1,2026-01-19,lunes,ISOIN_Sevilla,Torreblanca,15:15,915,17.0,7,166.1,medio,soleado,75,16:30,990,13,88,16:43,1003,no
+R0042,D1,2026-01-19,lunes,ISOIN_Sevilla,Sevilla Este,15:20,920,7.3,3,102.5,medio,nublado,44,16:04,964,17,61,16:21,981,no
+R0043,D1,2026-01-19,lunes,ISOIN_Sevilla,San Pablo,08:45,525,13.9,6,79.7,alto,lluvia,74,09:59,599,27,101,10:26,626,no
+R0044,D1,2026-01-19,lunes,ISOIN_Sevilla,San Pablo,10:00,600,15.1,4,152.3,alto,nublado,80,11:20,680,28,108,11:48,708,no
+R0045,D1,2026-01-19,lunes,ISOIN_Sevilla,San Pablo,15:45,945,20.3,11,149.8,bajo,nublado,85,17:10,1030,8,93,17:18,1038,no
+R0046,D1,2026-01-20,martes,ISOIN_Sevilla,Alcala de Guadaira,15:50,950,16.4,7,148.4,medio,soleado,75,17:05,1025,5,80,17:10,1030,si
+R0047,D1,2026-01-20,martes,ISOIN_Sevilla,Sevilla Este,08:20,500,11.8,5,211.0,bajo,soleado,56,09:16,556,8,64,09:24,564,no
+R0048,D1,2026-01-20,martes,ISOIN_Sevilla,Nervion,08:45,525,11.9,15,182.3,alto,nublado,94,10:19,619,32,126,10:51,651,no
+R0049,D1,2026-01-21,miercoles,ISOIN_Sevilla,Alcala de Guadaira,15:45,945,20.7,9,171.5,medio,nublado,86,17:11,1031,16,102,17:27,1047,no
+R0050,D1,2026-01-21,miercoles,ISOIN_Sevilla,Torreblanca,07:45,465,10.9,13,232.6,medio,nublado,71,08:56,536,24,95,09:20,560,no
+R0051,D1,2026-01-21,miercoles,ISOIN_Sevilla,Nervion,07:45,465,7.1,10,87.7,bajo,soleado,54,08:39,519,1,55,08:40,520,si
+R0052,D1,2026-01-22,jueves,ISOIN_Sevilla,Alcala de Guadaira,15:45,945,9.8,9,104.3,bajo,soleado,59,16:44,1004,0,59,16:44,1004,si
+R0053,D1,2026-01-22,jueves,ISOIN_Sevilla,Alcala de Guadaira,08:10,490,19.3,13,54.5,bajo,soleado,79,09:29,569,12,91,09:41,581,no
+R0054,D1,2026-01-22,jueves,ISOIN_Sevilla,Sevilla Este,10:10,610,15.2,6,154.3,bajo,soleado,67,11:17,677,5,72,11:22,682,si
+R0055,D1,2026-01-23,viernes,ISOIN_Sevilla,Nervion,15:15,915,22.8,4,181.0,alto,soleado,95,16:50,1010,20,115,17:10,1030,no
+R0056,D1,2026-01-23,viernes,ISOIN_Sevilla,San Pablo,13:20,800,6.4,15,115.9,alto,nublado,82,14:42,882,27,109,15:09,909,no
+R0057,D1,2026-01-23,viernes,ISOIN_Sevilla,Alcala de Guadaira,07:40,460,4.7,9,238.2,bajo,lluvia,47,08:27,507,13,60,08:40,520,no
+R0058,D1,2026-01-24,sabado,ISOIN_Sevilla,San Pablo,13:30,810,16.2,11,227.0,medio,nublado,86,14:56,896,17,103,15:13,913,no
+R0059,D1,2026-01-24,sabado,ISOIN_Sevilla,Nervion,09:50,590,9.1,10,178.9,alto,soleado,77,11:07,667,16,93,11:23,683,no
+R0060,D1,2026-01-24,sabado,ISOIN_Sevilla,Torreblanca,08:40,520,19.7,8,110.7,medio,lluvia,87,10:07,607,12,99,10:19,619,no
+R0061,D1,2026-01-26,lunes,ISOIN_Sevilla,Torreblanca,10:20,620,17.6,13,212.3,bajo,soleado,80,11:40,700,12,92,11:52,712,no
+R0062,D1,2026-01-26,lunes,ISOIN_Sevilla,Sevilla Este,09:40,580,13.5,11,125.8,alto,soleado,86,11:06,666,21,107,11:27,687,no
+R0063,D1,2026-01-26,lunes,ISOIN_Sevilla,Alcala de Guadaira,09:20,560,6.8,6,119.2,alto,lluvia,59,10:19,619,28,87,10:47,647,no
+R0064,D1,2026-01-26,lunes,ISOIN_Sevilla,Alcala de Guadaira,13:30,810,23.1,6,114.6,medio,soleado,91,15:01,901,7,98,15:08,908,no
+R0065,D1,2026-01-26,lunes,ISOIN_Sevilla,Nervion,12:30,750,17.8,5,194.9,medio,soleado,70,13:40,820,12,82,13:52,832,no
+R0066,D1,2026-01-26,lunes,ISOIN_Sevilla,Torreblanca,10:50,650,11.0,3,104.3,alto,soleado,62,11:52,712,27,89,12:19,739,no
+R0067,D1,2026-01-27,martes,ISOIN_Sevilla,Nervion,12:00,720,7.4,15,177.3,bajo,lluvia,58,12:58,778,23,81,13:21,801,no
+R0068,D1,2026-01-27,martes,ISOIN_Sevilla,San Pablo,15:20,920,19.2,9,150.9,bajo,nublado,78,16:38,998,10,88,16:48,1008,no
+R0069,D1,2026-01-27,martes,ISOIN_Sevilla,Nervion,12:10,730,22.5,6,192.0,bajo,soleado,77,13:27,807,4,81,13:31,811,si
+R0070,D1,2026-01-28,miercoles,ISOIN_Sevilla,Nervion,08:00,480,12.3,14,184.5,medio,soleado,78,09:18,558,15,93,09:33,573,no
+R0071,D1,2026-01-28,miercoles,ISOIN_Sevilla,Sevilla Este,09:20,560,12.6,11,97.8,bajo,soleado,63,10:23,623,0,63,10:23,623,si
+R0072,D1,2026-01-28,miercoles,ISOIN_Sevilla,Nervion,08:30,510,15.8,12,261.5,medio,soleado,82,09:52,592,22,104,10:14,614,no
+R0073,D1,2026-01-29,jueves,ISOIN_Sevilla,Torreblanca,10:10,610,15.9,9,217.6,medio,soleado,76,11:26,686,17,93,11:43,703,no
+R0074,D1,2026-01-29,jueves,ISOIN_Sevilla,Alcala de Guadaira,12:00,720,19.0,5,155.6,medio,lluvia,74,13:14,794,35,109,13:49,829,no
+R0075,D1,2026-01-29,jueves,ISOIN_Sevilla,Nervion,10:40,640,12.3,8,202.5,alto,soleado,80,12:00,720,22,102,12:22,742,no
+R0076,D1,2026-01-30,viernes,ISOIN_Sevilla,San Pablo,07:50,470,6.2,7,121.0,alto,soleado,66,08:56,536,20,86,09:16,556,no
+R0077,D1,2026-01-30,viernes,ISOIN_Sevilla,Torreblanca,07:20,440,14.4,12,222.8,medio,nublado,78,08:38,518,20,98,08:58,538,no
+R0078,D1,2026-01-30,viernes,ISOIN_Sevilla,Torreblanca,07:00,420,23.0,12,232.8,medio,soleado,94,08:34,514,21,115,08:55,535,no
+R0079,D1,2026-01-31,sabado,ISOIN_Sevilla,Torreblanca,07:15,435,14.0,14,113.6,medio,soleado,85,08:40,520,15,100,08:55,535,no
+R0080,D1,2026-01-31,sabado,ISOIN_Sevilla,San Pablo,08:45,525,8.1,12,164.4,alto,nublado,75,10:00,600,31,106,10:31,631,no
+R0081,D1,2026-01-31,sabado,ISOIN_Sevilla,Nervion,09:30,570,20.4,12,279.7,medio,soleado,96,11:06,666,28,124,11:34,694,no
+R0082,D1,2026-02-02,lunes,ISOIN_Sevilla,Torreblanca,10:40,640,21.0,14,101.1,bajo,nublado,91,12:11,731,11,102,12:22,742,no
+R0083,D1,2026-02-02,lunes,ISOIN_Sevilla,Torreblanca,10:15,615,13.9,3,74.7,alto,soleado,68,11:23,683,16,84,11:39,699,no
+R0084,D1,2026-02-02,lunes,ISOIN_Sevilla,San Pablo,10:00,600,18.2,9,249.7,alto,soleado,92,11:32,692,32,124,12:04,724,no
+R0085,D1,2026-02-02,lunes,ISOIN_Sevilla,Alcala de Guadaira,15:45,945,22.6,13,213.9,medio,nublado,95,17:20,1040,29,124,17:49,1069,no
+R0086,D1,2026-02-02,lunes,ISOIN_Sevilla,Sevilla Este,13:10,790,12.7,4,223.7,alto,soleado,69,14:19,859,12,81,14:31,871,no
+R0087,D1,2026-02-02,lunes,ISOIN_Sevilla,Alcala de Guadaira,15:00,900,10.1,8,146.2,medio,soleado,60,16:00,960,3,63,16:03,963,si
+R0088,D1,2026-02-03,martes,ISOIN_Sevilla,Nervion,12:45,765,16.3,6,162.0,medio,soleado,72,13:57,837,10,82,14:07,847,no
+R0089,D1,2026-02-03,martes,ISOIN_Sevilla,Nervion,15:50,950,21.6,13,173.5,bajo,lluvia,93,17:23,1043,29,122,17:52,1072,no
+R0090,D1,2026-02-03,martes,ISOIN_Sevilla,Alcala de Guadaira,10:30,630,8.3,9,245.5,bajo,soleado,53,11:23,683,9,62,11:32,692,no
+R0091,D1,2026-02-04,miercoles,ISOIN_Sevilla,Alcala de Guadaira,07:45,465,9.7,12,248.3,medio,lluvia,73,08:58,538,34,107,09:32,572,no
+R0092,D1,2026-02-04,miercoles,ISOIN_Sevilla,Alcala de Guadaira,08:20,500,16.3,13,222.6,alto,nublado,93,09:53,593,34,127,10:27,627,no
+R0093,D1,2026-02-04,miercoles,ISOIN_Sevilla,Alcala de Guadaira,15:50,950,5.1,8,217.1,bajo,soleado,45,16:35,995,1,46,16:36,996,si
+R0094,D1,2026-02-05,jueves,ISOIN_Sevilla,Sevilla Este,15:40,940,14.6,7,240.2,bajo,nublado,65,16:45,1005,13,78,16:58,1018,no
+R0095,D1,2026-02-05,jueves,ISOIN_Sevilla,Alcala de Guadaira,15:10,910,13.4,4,78.1,alto,nublado,74,16:24,984,25,99,16:49,1009,no
+R0096,D1,2026-02-05,jueves,ISOIN_Sevilla,Torreblanca,07:30,450,14.7,10,131.6,medio,soleado,78,08:48,528,14,92,09:02,542,no
+R0097,D1,2026-02-06,viernes,ISOIN_Sevilla,Nervion,13:20,800,13.5,12,252.8,medio,lluvia,76,14:36,876,40,116,15:16,916,no
+R0098,D1,2026-02-06,viernes,ISOIN_Sevilla,Alcala de Guadaira,13:45,825,6.7,3,267.4,medio,soleado,43,14:28,868,9,52,14:37,877,no
+R0099,D1,2026-02-06,viernes,ISOIN_Sevilla,Torreblanca,09:45,585,15.7,14,81.3,medio,soleado,88,11:13,673,19,107,11:32,692,no
+R0100,D1,2026-02-07,sabado,ISOIN_Sevilla,Nervion,13:40,820,8.6,10,268.4,alto,soleado,73,14:53,893,27,100,15:20,920,no
+R0101,D1,2026-02-07,sabado,ISOIN_Sevilla,Torreblanca,09:20,560,22.9,10,66.5,medio,nublado,90,10:50,650,8,98,10:58,658,no
+R0102,D1,2026-02-07,sabado,ISOIN_Sevilla,San Pablo,08:10,490,20.3,11,93.7,medio,nublado,91,09:41,581,6,97,09:47,587,no
+R0103,D1,2026-02-09,lunes,ISOIN_Sevilla,Sevilla Este,12:30,750,19.7,4,200.3,bajo,soleado,67,13:37,817,9,76,13:46,826,no
+R0104,D1,2026-02-09,lunes,ISOIN_Sevilla,Nervion,08:30,510,5.5,14,143.9,bajo,soleado,58,09:28,568,8,66,09:36,576,no
+R0105,D1,2026-02-09,lunes,ISOIN_Sevilla,San Pablo,07:50,470,14.1,12,55.2,medio,nublado,82,09:12,552,18,100,09:30,570,no
+R0106,D1,2026-02-09,lunes,ISOIN_Sevilla,Nervion,10:45,645,12.6,4,160.2,alto,soleado,67,11:52,712,15,82,12:07,727,no
+R0107,D1,2026-02-09,lunes,ISOIN_Sevilla,Nervion,08:30,510,16.4,12,173.9,medio,lluvia,87,09:57,597,31,118,10:28,628,no
+R0108,D1,2026-02-09,lunes,ISOIN_Sevilla,Torreblanca,07:10,430,20.7,13,251.3,medio,nublado,96,08:46,526,30,126,09:16,556,no
+R0109,D1,2026-02-10,martes,ISOIN_Sevilla,Torreblanca,10:10,610,10.4,8,201.3,bajo,soleado,58,11:08,668,0,58,11:08,668,si
+R0110,D1,2026-02-10,martes,ISOIN_Sevilla,Nervion,15:10,910,6.3,4,220.0,bajo,soleado,35,15:45,945,11,46,15:56,956,no
+R0111,D1,2026-02-10,martes,ISOIN_Sevilla,San Pablo,09:10,550,12.3,13,266.2,medio,lluvia,72,10:22,622,27,99,10:49,649,no
+R0112,D1,2026-02-11,miercoles,ISOIN_Sevilla,San Pablo,08:15,495,17.0,6,244.1,medio,soleado,71,09:26,566,14,85,09:40,580,no
+R0113,D1,2026-02-11,miercoles,ISOIN_Sevilla,Torreblanca,15:00,900,16.1,13,239.9,medio,soleado,84,16:24,984,15,99,16:39,999,no
+R0114,D1,2026-02-11,miercoles,ISOIN_Sevilla,Sevilla Este,12:45,765,5.8,14,193.8,bajo,nublado,54,13:39,819,11,65,13:50,830,no
+R0115,D1,2026-02-12,jueves,ISOIN_Sevilla,Alcala de Guadaira,08:40,520,10.4,8,227.6,medio,soleado,59,09:39,579,11,70,09:50,590,no
+R0116,D1,2026-02-12,jueves,ISOIN_Sevilla,San Pablo,07:10,430,9.7,13,144.6,medio,soleado,69,08:19,499,13,82,08:32,512,no
+R0117,D1,2026-02-12,jueves,ISOIN_Sevilla,Torreblanca,07:30,450,17.4,12,159.4,medio,soleado,87,08:57,537,11,98,09:08,548,no
+R0118,D1,2026-02-13,viernes,ISOIN_Sevilla,Sevilla Este,09:20,560,19.1,15,105.0,medio,soleado,97,10:57,657,15,112,11:12,672,no
+R0119,D1,2026-02-13,viernes,ISOIN_Sevilla,Sevilla Este,12:40,760,5.9,14,54.9,bajo,lluvia,57,13:37,817,24,81,14:01,841,no
+R0120,D1,2026-02-13,viernes,ISOIN_Sevilla,Torreblanca,13:45,825,10.0,9,49.9,medio,nublado,69,14:54,894,11,80,15:05,905,no
+R0121,D1,2026-02-14,sabado,ISOIN_Sevilla,Torreblanca,15:10,910,9.1,12,139.1,bajo,nublado,60,16:10,970,10,70,16:20,980,no
+R0122,D1,2026-02-14,sabado,ISOIN_Sevilla,Sevilla Este,07:10,430,14.6,6,257.9,bajo,nublado,58,08:08,488,2,60,08:10,490,si
+R0123,D1,2026-02-14,sabado,ISOIN_Sevilla,Alcala de Guadaira,08:15,495,15.9,15,223.4,bajo,lluvia,82,09:37,577,33,115,10:10,610,no
+R0124,D1,2026-02-16,lunes,ISOIN_Sevilla,Torreblanca,13:40,820,20.9,13,119.3,medio,soleado,95,15:15,915,14,109,15:29,929,no
+R0125,D1,2026-02-16,lunes,ISOIN_Sevilla,Nervion,09:50,590,13.1,3,131.7,medio,nublado,57,10:47,647,17,74,11:04,664,no
+R0126,D1,2026-02-16,lunes,ISOIN_Sevilla,San Pablo,12:00,720,13.0,15,179.3,bajo,nublado,77,13:17,797,4,81,13:21,801,si
+R0127,D1,2026-02-16,lunes,ISOIN_Sevilla,Nervion,15:40,940,23.2,4,163.6,bajo,soleado,79,16:59,1019,9,88,17:08,1028,no
+R0128,D1,2026-02-16,lunes,ISOIN_Sevilla,San Pablo,12:15,735,11.4,7,136.0,medio,nublado,59,13:14,794,14,73,13:28,808,no
+R0129,D1,2026-02-16,lunes,ISOIN_Sevilla,Alcala de Guadaira,07:45,465,9.9,14,245.1,alto,nublado,80,09:05,545,28,108,09:33,573,no
+R0130,D1,2026-02-17,martes,ISOIN_Sevilla,Alcala de Guadaira,09:45,585,7.0,14,265.4,medio,soleado,67,10:52,652,17,84,11:09,669,no
+R0131,D1,2026-02-17,martes,ISOIN_Sevilla,Torreblanca,12:40,760,4.8,7,87.4,bajo,lluvia,44,13:24,804,8,52,13:32,812,no
+R0132,D1,2026-02-17,martes,ISOIN_Sevilla,Sevilla Este,08:10,490,10.1,15,68.8,alto,nublado,89,09:39,579,24,113,10:03,603,no
+R0133,D1,2026-02-18,miercoles,ISOIN_Sevilla,San Pablo,10:15,615,7.6,14,226.2,medio,soleado,70,11:25,685,17,87,11:42,702,no
+R0134,D1,2026-02-18,miercoles,ISOIN_Sevilla,Sevilla Este,10:30,630,18.8,15,150.5,medio,soleado,97,12:07,727,21,118,12:28,748,no
+R0135,D1,2026-02-18,miercoles,ISOIN_Sevilla,Torreblanca,10:30,630,19.3,11,169.0,alto,nublado,103,12:13,733,23,126,12:36,756,no
+R0136,D1,2026-02-19,jueves,ISOIN_Sevilla,Torreblanca,15:40,940,15.0,4,212.2,medio,soleado,63,16:43,1003,10,73,16:53,1013,no
+R0137,D1,2026-02-19,jueves,ISOIN_Sevilla,San Pablo,08:45,525,6.2,6,236.9,alto,lluvia,62,09:47,587,36,98,10:23,623,no
+R0138,D1,2026-02-19,jueves,ISOIN_Sevilla,Sevilla Este,10:10,610,11.6,3,119.9,bajo,nublado,49,10:59,659,0,49,10:59,659,si
+R0139,D1,2026-02-20,viernes,ISOIN_Sevilla,Nervion,09:50,590,17.7,5,223.3,medio,nublado,70,11:00,660,12,82,11:12,672,no
+R0140,D1,2026-02-20,viernes,ISOIN_Sevilla,Sevilla Este,12:45,765,6.6,7,100.8,bajo,soleado,50,13:35,815,3,53,13:38,818,si
+R0141,D1,2026-02-20,viernes,ISOIN_Sevilla,Nervion,07:50,470,15.8,3,193.5,medio,nublado,66,08:56,536,9,75,09:05,545,no
+R0142,D1,2026-02-21,sabado,ISOIN_Sevilla,Alcala de Guadaira,08:45,525,8.1,13,65.1,alto,soleado,81,10:06,606,20,101,10:26,626,no
+R0143,D1,2026-02-21,sabado,ISOIN_Sevilla,Torreblanca,07:45,465,23.1,7,220.6,bajo,soleado,80,09:05,545,15,95,09:20,560,no
+R0144,D1,2026-02-21,sabado,ISOIN_Sevilla,San Pablo,13:40,820,7.0,8,173.3,alto,soleado,68,14:48,888,18,86,15:06,906,no
+R0145,D1,2026-02-23,lunes,ISOIN_Sevilla,Sevilla Este,07:50,470,5.2,6,55.3,bajo,soleado,40,08:30,510,4,44,08:34,514,si
+R0146,D1,2026-02-23,lunes,ISOIN_Sevilla,Torreblanca,15:50,950,9.3,15,197.0,bajo,nublado,61,16:51,1011,13,74,17:04,1024,no
+R0147,D1,2026-02-23,lunes,ISOIN_Sevilla,Nervion,15:40,940,12.8,9,219.7,alto,soleado,78,16:58,1018,32,110,17:30,1050,no
+R0148,D1,2026-02-23,lunes,ISOIN_Sevilla,San Pablo,09:10,550,18.3,4,146.2,alto,soleado,83,10:33,633,16,99,10:49,649,no
+R0149,D1,2026-02-23,lunes,ISOIN_Sevilla,Alcala de Guadaira,13:30,810,10.3,12,213.7,medio,soleado,73,14:43,883,16,89,14:59,899,no
+R0150,D1,2026-02-23,lunes,ISOIN_Sevilla,Alcala de Guadaira,13:00,780,5.9,13,140.5,medio,nublado,60,14:00,840,13,73,14:13,853,no

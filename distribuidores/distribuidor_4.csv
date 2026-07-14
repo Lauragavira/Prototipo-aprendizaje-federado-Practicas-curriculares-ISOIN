@@ -1,0 +1,151 @@
+id_reparto,distribuidor_id,fecha,dia_semana,centro_destino,zona_origen,hora_salida,hora_salida_min,distancia_km,numero_entregas,peso_total_kg,trafico,clima,duracion_estimada_min,hora_llegada_estimada,hora_llegada_estimada_min,retraso_min,duracion_real_min,hora_llegada_real,hora_llegada_real_min,puntual
+R3001,D4,2026-03-02,lunes,ISOIN_Sevilla,Santiponce,08:05,485,25.9,12,304.6,medio,nublado,108,09:53,593,32,140,10:25,625,no
+R3002,D4,2026-03-02,lunes,ISOIN_Sevilla,Sevilla Este,16:10,970,19.9,8,82.2,bajo,soleado,75,17:25,1045,5,80,17:30,1050,si
+R3003,D4,2026-03-02,lunes,ISOIN_Sevilla,Aeropuerto,11:45,705,12.0,9,131.7,bajo,soleado,63,12:48,768,0,63,12:48,768,si
+R3004,D4,2026-03-03,martes,ISOIN_Sevilla,Parque Alcosa,14:20,860,14.3,16,210.1,medio,soleado,83,15:43,943,19,102,16:02,962,no
+R3005,D4,2026-03-03,martes,ISOIN_Sevilla,Aeropuerto,08:55,535,16.1,6,81.3,alto,nublado,86,10:21,621,35,121,10:56,656,no
+R3006,D4,2026-03-03,martes,ISOIN_Sevilla,Santiponce,06:45,405,13.1,14,261.2,bajo,soleado,66,07:51,471,24,90,08:15,495,no
+R3007,D4,2026-03-04,miercoles,ISOIN_Sevilla,La Rinconada,07:55,475,18.1,5,80.0,medio,soleado,73,09:08,548,12,85,09:20,560,no
+R3008,D4,2026-03-04,miercoles,ISOIN_Sevilla,La Rinconada,06:35,395,12.3,8,106.1,medio,soleado,63,07:38,458,14,77,07:52,472,no
+R3009,D4,2026-03-04,miercoles,ISOIN_Sevilla,Parque Alcosa,08:55,535,20.4,14,78.9,bajo,nublado,93,10:28,628,26,119,10:54,654,no
+R3010,D4,2026-03-05,jueves,ISOIN_Sevilla,Santiponce,08:10,490,23.8,15,105.0,medio,lluvia,106,09:56,596,28,134,10:24,624,no
+R3011,D4,2026-03-05,jueves,ISOIN_Sevilla,Sevilla Este,08:25,505,10.2,17,308.3,medio,soleado,77,09:42,582,25,102,10:07,607,no
+R3012,D4,2026-03-05,jueves,ISOIN_Sevilla,Santiponce,11:05,665,26.0,15,172.9,medio,nublado,111,12:56,776,37,148,13:33,813,no
+R3013,D4,2026-03-06,viernes,ISOIN_Sevilla,Parque Alcosa,06:00,360,14.1,17,267.2,medio,lluvia,83,07:23,443,29,112,07:52,472,no
+R3014,D4,2026-03-06,viernes,ISOIN_Sevilla,La Rinconada,16:00,960,18.8,10,123.6,bajo,nublado,72,17:12,1032,8,80,17:20,1040,no
+R3015,D4,2026-03-06,viernes,ISOIN_Sevilla,Sevilla Este,07:00,420,12.6,14,258.2,alto,lluvia,91,08:31,511,55,146,09:26,566,no
+R3016,D4,2026-03-07,sabado,ISOIN_Sevilla,Sevilla Este,07:55,475,15.0,7,138.4,medio,soleado,74,09:09,549,21,95,09:30,570,no
+R3017,D4,2026-03-07,sabado,ISOIN_Sevilla,Sevilla Este,14:45,885,19.2,8,310.4,medio,soleado,85,16:10,970,17,102,16:27,987,no
+R3018,D4,2026-03-07,sabado,ISOIN_Sevilla,Parque Alcosa,07:45,465,12.6,11,90.2,alto,lluvia,86,09:11,551,43,129,09:54,594,no
+R3019,D4,2026-03-09,lunes,ISOIN_Sevilla,Santiponce,09:00,540,12.6,15,139.7,medio,soleado,82,10:22,622,22,104,10:44,644,no
+R3020,D4,2026-03-09,lunes,ISOIN_Sevilla,Aeropuerto,07:25,445,8.1,5,125.8,alto,soleado,61,08:26,506,39,100,09:05,545,no
+R3021,D4,2026-03-09,lunes,ISOIN_Sevilla,Sevilla Este,07:25,445,21.6,16,257.7,medio,soleado,104,09:09,549,37,141,09:46,586,no
+R3022,D4,2026-03-09,lunes,ISOIN_Sevilla,Parque Alcosa,11:10,670,13.0,17,165.8,bajo,soleado,71,12:21,741,17,88,12:38,758,no
+R3023,D4,2026-03-09,lunes,ISOIN_Sevilla,La Rinconada,08:05,485,11.9,12,67.9,alto,nublado,76,09:21,561,19,95,09:40,580,no
+R3024,D4,2026-03-09,lunes,ISOIN_Sevilla,Santiponce,06:35,395,20.0,9,208.3,bajo,soleado,77,07:52,472,8,85,08:00,480,no
+R3025,D4,2026-03-10,martes,ISOIN_Sevilla,Sevilla Este,16:20,980,8.7,8,248.8,bajo,soleado,49,17:09,1029,15,64,17:24,1044,no
+R3026,D4,2026-03-10,martes,ISOIN_Sevilla,Sevilla Este,11:55,715,25.6,13,309.6,medio,lluvia,109,13:44,824,44,153,14:28,868,no
+R3027,D4,2026-03-10,martes,ISOIN_Sevilla,Sevilla Este,08:20,500,16.4,9,164.8,medio,nublado,75,09:35,575,19,94,09:54,594,no
+R3028,D4,2026-03-11,miercoles,ISOIN_Sevilla,Santiponce,14:10,850,24.6,8,254.8,medio,soleado,95,15:45,945,27,122,16:12,972,no
+R3029,D4,2026-03-11,miercoles,ISOIN_Sevilla,La Rinconada,08:10,490,14.0,17,143.2,medio,lluvia,83,09:33,573,31,114,10:04,604,no
+R3030,D4,2026-03-11,miercoles,ISOIN_Sevilla,La Rinconada,11:10,670,18.1,13,236.4,alto,soleado,94,12:44,764,38,132,13:22,802,no
+R3031,D4,2026-03-12,jueves,ISOIN_Sevilla,Sevilla Este,08:00,480,25.2,16,238.2,medio,nublado,112,09:52,592,25,137,10:17,617,no
+R3032,D4,2026-03-12,jueves,ISOIN_Sevilla,Santiponce,07:25,445,21.8,16,173.3,medio,nublado,99,09:04,544,24,123,09:28,568,no
+R3033,D4,2026-03-12,jueves,ISOIN_Sevilla,Aeropuerto,16:00,960,12.9,16,260.0,medio,lluvia,74,17:14,1034,44,118,17:58,1078,no
+R3034,D4,2026-03-13,viernes,ISOIN_Sevilla,Sevilla Este,11:25,685,19.7,9,111.8,bajo,nublado,81,12:46,766,12,93,12:58,778,no
+R3035,D4,2026-03-13,viernes,ISOIN_Sevilla,Sevilla Este,16:20,980,16.8,8,109.2,bajo,soleado,71,17:31,1051,4,75,17:35,1055,si
+R3036,D4,2026-03-13,viernes,ISOIN_Sevilla,La Rinconada,08:00,480,10.1,12,92.3,bajo,soleado,59,08:59,539,6,65,09:05,545,no
+R3037,D4,2026-03-14,sabado,ISOIN_Sevilla,Sevilla Este,16:45,1005,23.7,7,109.5,bajo,nublado,83,18:08,1088,14,97,18:22,1102,no
+R3038,D4,2026-03-14,sabado,ISOIN_Sevilla,Parque Alcosa,14:20,860,17.7,8,82.7,medio,soleado,80,15:40,940,10,90,15:50,950,no
+R3039,D4,2026-03-14,sabado,ISOIN_Sevilla,Sevilla Este,08:25,505,10.0,16,103.7,medio,nublado,71,09:36,576,31,102,10:07,607,no
+R3040,D4,2026-03-16,lunes,ISOIN_Sevilla,Santiponce,16:10,970,12.0,6,189.9,bajo,nublado,53,17:03,1023,13,66,17:16,1036,no
+R3041,D4,2026-03-16,lunes,ISOIN_Sevilla,Parque Alcosa,09:25,565,14.0,8,82.7,alto,nublado,74,10:39,639,35,109,11:14,674,no
+R3042,D4,2026-03-16,lunes,ISOIN_Sevilla,La Rinconada,07:35,455,10.7,17,262.6,alto,soleado,84,08:59,539,35,119,09:34,574,no
+R3043,D4,2026-03-16,lunes,ISOIN_Sevilla,Santiponce,11:55,715,8.4,16,319.3,medio,soleado,71,13:06,786,23,94,13:29,809,no
+R3044,D4,2026-03-16,lunes,ISOIN_Sevilla,Sevilla Este,11:10,670,18.3,6,174.7,bajo,soleado,70,12:20,740,6,76,12:26,746,no
+R3045,D4,2026-03-16,lunes,ISOIN_Sevilla,Aeropuerto,11:45,705,20.4,14,268.8,bajo,nublado,84,13:09,789,36,120,13:45,825,no
+R3046,D4,2026-03-17,martes,ISOIN_Sevilla,La Rinconada,09:25,565,12.6,6,71.7,medio,lluvia,57,10:22,622,19,76,10:41,641,no
+R3047,D4,2026-03-17,martes,ISOIN_Sevilla,Parque Alcosa,08:45,525,19.5,5,231.8,bajo,soleado,68,09:53,593,7,75,10:00,600,no
+R3048,D4,2026-03-17,martes,ISOIN_Sevilla,Santiponce,06:00,360,11.3,15,92.3,bajo,nublado,70,07:10,430,10,80,07:20,440,no
+R3049,D4,2026-03-18,miercoles,ISOIN_Sevilla,Aeropuerto,08:05,485,21.8,17,257.2,alto,nublado,113,09:58,598,48,161,10:46,646,no
+R3050,D4,2026-03-18,miercoles,ISOIN_Sevilla,Santiponce,07:35,455,9.7,8,108.0,medio,soleado,60,08:35,515,17,77,08:52,532,no
+R3051,D4,2026-03-18,miercoles,ISOIN_Sevilla,Santiponce,07:05,425,11.8,5,243.3,medio,soleado,60,08:05,485,20,80,08:25,505,no
+R3052,D4,2026-03-19,jueves,ISOIN_Sevilla,La Rinconada,08:45,525,18.9,7,114.1,medio,nublado,84,10:09,609,20,104,10:29,629,no
+R3053,D4,2026-03-19,jueves,ISOIN_Sevilla,La Rinconada,07:10,430,23.9,15,114.8,medio,soleado,109,08:59,539,27,136,09:26,566,no
+R3054,D4,2026-03-19,jueves,ISOIN_Sevilla,Santiponce,16:35,995,20.0,14,305.9,medio,soleado,91,18:06,1086,29,120,18:35,1115,no
+R3055,D4,2026-03-20,viernes,ISOIN_Sevilla,Sevilla Este,08:10,490,23.4,5,319.4,bajo,nublado,78,09:28,568,15,93,09:43,583,no
+R3056,D4,2026-03-20,viernes,ISOIN_Sevilla,Aeropuerto,16:55,1015,12.8,8,184.8,alto,soleado,74,18:09,1089,24,98,18:33,1113,no
+R3057,D4,2026-03-20,viernes,ISOIN_Sevilla,Parque Alcosa,14:25,865,21.0,13,130.8,medio,soleado,92,15:57,957,32,124,16:29,989,no
+R3058,D4,2026-03-21,sabado,ISOIN_Sevilla,Santiponce,07:05,425,22.7,10,209.4,alto,nublado,98,08:43,523,37,135,09:20,560,no
+R3059,D4,2026-03-21,sabado,ISOIN_Sevilla,La Rinconada,14:35,875,19.0,9,93.5,medio,nublado,80,15:55,955,15,95,16:10,970,no
+R3060,D4,2026-03-21,sabado,ISOIN_Sevilla,Parque Alcosa,09:35,575,22.3,11,137.5,alto,nublado,100,11:15,675,44,144,11:59,719,no
+R3061,D4,2026-03-23,lunes,ISOIN_Sevilla,La Rinconada,06:05,365,26.2,13,243.5,bajo,soleado,104,07:49,469,29,133,08:18,498,no
+R3062,D4,2026-03-23,lunes,ISOIN_Sevilla,La Rinconada,08:45,525,8.8,17,89.6,medio,soleado,77,10:02,602,22,99,10:24,624,no
+R3063,D4,2026-03-23,lunes,ISOIN_Sevilla,Sevilla Este,14:25,865,25.3,14,61.0,alto,soleado,111,16:16,976,36,147,16:52,1012,no
+R3064,D4,2026-03-23,lunes,ISOIN_Sevilla,La Rinconada,07:20,440,22.8,13,95.3,alto,soleado,109,09:09,549,50,159,09:59,599,no
+R3065,D4,2026-03-23,lunes,ISOIN_Sevilla,Aeropuerto,08:05,485,9.4,8,298.8,alto,soleado,70,09:15,555,29,99,09:44,584,no
+R3066,D4,2026-03-23,lunes,ISOIN_Sevilla,Parque Alcosa,16:25,985,24.0,16,81.4,medio,nublado,105,18:10,1090,30,135,18:40,1120,no
+R3067,D4,2026-03-24,martes,ISOIN_Sevilla,Sevilla Este,16:25,985,21.3,16,247.1,bajo,lluvia,87,17:52,1072,40,127,18:32,1112,no
+R3068,D4,2026-03-24,martes,ISOIN_Sevilla,Aeropuerto,16:20,980,25.7,7,170.5,medio,soleado,100,18:00,1080,28,128,18:28,1108,no
+R3069,D4,2026-03-24,martes,ISOIN_Sevilla,Aeropuerto,06:20,380,16.6,14,164.4,bajo,soleado,75,07:35,455,16,91,07:51,471,no
+R3070,D4,2026-03-25,miercoles,ISOIN_Sevilla,Parque Alcosa,14:25,865,8.1,12,100.7,medio,soleado,58,15:23,923,19,77,15:42,942,no
+R3071,D4,2026-03-25,miercoles,ISOIN_Sevilla,Aeropuerto,09:10,550,15.4,11,278.5,medio,soleado,81,10:31,631,19,100,10:50,650,no
+R3072,D4,2026-03-25,miercoles,ISOIN_Sevilla,Sevilla Este,09:00,540,25.0,17,167.2,medio,lluvia,107,10:47,647,37,144,11:24,684,no
+R3073,D4,2026-03-26,jueves,ISOIN_Sevilla,Santiponce,11:00,660,22.3,11,224.5,alto,soleado,99,12:39,759,28,127,13:07,787,no
+R3074,D4,2026-03-26,jueves,ISOIN_Sevilla,Sevilla Este,14:20,860,21.3,13,102.7,alto,soleado,109,16:09,969,30,139,16:39,999,no
+R3075,D4,2026-03-26,jueves,ISOIN_Sevilla,Parque Alcosa,06:55,415,14.3,16,288.1,bajo,soleado,74,08:09,489,11,85,08:20,500,no
+R3076,D4,2026-03-27,viernes,ISOIN_Sevilla,Sevilla Este,06:05,365,25.2,5,102.4,bajo,soleado,85,07:30,450,16,101,07:46,466,no
+R3077,D4,2026-03-27,viernes,ISOIN_Sevilla,Santiponce,07:10,430,22.9,9,234.6,alto,nublado,106,08:56,536,26,132,09:22,562,no
+R3078,D4,2026-03-27,viernes,ISOIN_Sevilla,Sevilla Este,09:25,565,15.3,12,280.0,bajo,lluvia,71,10:36,636,29,100,11:05,665,no
+R3079,D4,2026-03-28,sabado,ISOIN_Sevilla,Aeropuerto,14:35,875,16.4,8,230.5,medio,soleado,72,15:47,947,13,85,16:00,960,no
+R3080,D4,2026-03-28,sabado,ISOIN_Sevilla,Santiponce,14:55,895,14.9,6,171.1,medio,nublado,67,16:02,962,15,82,16:17,977,no
+R3081,D4,2026-03-28,sabado,ISOIN_Sevilla,Santiponce,16:25,985,21.8,9,128.4,alto,nublado,103,18:08,1088,42,145,18:50,1130,no
+R3082,D4,2026-03-30,lunes,ISOIN_Sevilla,Parque Alcosa,09:25,565,17.2,16,311.2,medio,nublado,90,10:55,655,26,116,11:21,681,no
+R3083,D4,2026-03-30,lunes,ISOIN_Sevilla,La Rinconada,16:25,985,10.5,15,288.1,medio,nublado,73,17:38,1058,30,103,18:08,1088,no
+R3084,D4,2026-03-30,lunes,ISOIN_Sevilla,Aeropuerto,08:20,500,9.8,7,124.5,alto,soleado,71,09:31,571,30,101,10:01,601,no
+R3085,D4,2026-03-30,lunes,ISOIN_Sevilla,Sevilla Este,11:45,705,13.6,6,113.5,bajo,soleado,62,12:47,767,8,70,12:55,775,no
+R3086,D4,2026-03-30,lunes,ISOIN_Sevilla,La Rinconada,16:10,970,21.3,5,66.3,alto,soleado,91,17:41,1061,32,123,18:13,1093,no
+R3087,D4,2026-03-30,lunes,ISOIN_Sevilla,Aeropuerto,08:20,500,16.0,12,260.8,medio,soleado,85,09:45,585,25,110,10:10,610,no
+R3088,D4,2026-03-31,martes,ISOIN_Sevilla,Parque Alcosa,11:05,665,12.8,10,66.7,alto,soleado,84,12:29,749,34,118,13:03,783,no
+R3089,D4,2026-03-31,martes,ISOIN_Sevilla,Parque Alcosa,07:55,475,23.8,13,69.9,alto,nublado,109,09:44,584,46,155,10:30,630,no
+R3090,D4,2026-03-31,martes,ISOIN_Sevilla,Parque Alcosa,14:25,865,17.3,10,312.7,alto,soleado,96,16:01,961,30,126,16:31,991,no
+R3091,D4,2026-04-01,miercoles,ISOIN_Sevilla,Parque Alcosa,14:05,845,8.8,17,136.6,medio,soleado,66,15:11,911,13,79,15:24,924,no
+R3092,D4,2026-04-01,miercoles,ISOIN_Sevilla,Santiponce,14:20,860,12.3,6,121.3,bajo,soleado,60,15:20,920,10,70,15:30,930,no
+R3093,D4,2026-04-01,miercoles,ISOIN_Sevilla,Santiponce,09:25,565,23.1,6,217.2,medio,soleado,86,10:51,651,16,102,11:07,667,no
+R3094,D4,2026-04-02,jueves,ISOIN_Sevilla,Sevilla Este,11:20,680,15.3,17,190.9,medio,nublado,89,12:49,769,26,115,13:15,795,no
+R3095,D4,2026-04-02,jueves,ISOIN_Sevilla,La Rinconada,07:25,445,11.2,5,237.0,bajo,soleado,52,08:17,497,7,59,08:24,504,no
+R3096,D4,2026-04-02,jueves,ISOIN_Sevilla,Santiponce,11:25,685,18.6,11,125.9,bajo,soleado,81,12:46,766,1,82,12:47,767,si
+R3097,D4,2026-04-03,viernes,ISOIN_Sevilla,La Rinconada,06:45,405,20.2,9,304.4,bajo,soleado,75,08:00,480,17,92,08:17,497,no
+R3098,D4,2026-04-03,viernes,ISOIN_Sevilla,La Rinconada,08:55,535,14.2,11,306.9,bajo,soleado,62,09:57,597,16,78,10:13,613,no
+R3099,D4,2026-04-03,viernes,ISOIN_Sevilla,Parque Alcosa,14:25,865,17.8,6,245.3,alto,lluvia,88,15:53,953,39,127,16:32,992,no
+R3100,D4,2026-04-04,sabado,ISOIN_Sevilla,La Rinconada,06:05,365,23.8,15,157.9,bajo,nublado,92,07:37,457,29,121,08:06,486,no
+R3101,D4,2026-04-04,sabado,ISOIN_Sevilla,La Rinconada,11:55,715,23.6,12,210.8,bajo,soleado,91,13:26,806,17,108,13:43,823,no
+R3102,D4,2026-04-04,sabado,ISOIN_Sevilla,La Rinconada,09:10,550,11.3,5,190.5,medio,soleado,63,10:13,613,11,74,10:24,624,no
+R3103,D4,2026-04-06,lunes,ISOIN_Sevilla,La Rinconada,08:35,515,9.6,7,117.2,alto,lluvia,67,09:42,582,44,111,10:26,626,no
+R3104,D4,2026-04-06,lunes,ISOIN_Sevilla,Sevilla Este,06:00,360,10.9,9,273.8,medio,soleado,67,07:07,427,24,91,07:31,451,no
+R3105,D4,2026-04-06,lunes,ISOIN_Sevilla,Parque Alcosa,06:00,360,14.1,12,277.8,medio,lluvia,77,07:17,437,38,115,07:55,475,no
+R3106,D4,2026-04-06,lunes,ISOIN_Sevilla,Sevilla Este,08:25,505,21.6,5,134.5,medio,soleado,82,09:47,587,22,104,10:09,609,no
+R3107,D4,2026-04-06,lunes,ISOIN_Sevilla,Aeropuerto,16:35,995,23.2,16,180.1,medio,nublado,99,18:14,1094,29,128,18:43,1123,no
+R3108,D4,2026-04-06,lunes,ISOIN_Sevilla,La Rinconada,07:25,445,9.4,16,196.5,medio,nublado,67,08:32,512,18,85,08:50,530,no
+R3109,D4,2026-04-07,martes,ISOIN_Sevilla,Sevilla Este,08:45,525,22.8,16,148.5,medio,lluvia,104,10:29,629,45,149,11:14,674,no
+R3110,D4,2026-04-07,martes,ISOIN_Sevilla,Sevilla Este,16:25,985,18.3,17,149.3,bajo,soleado,90,17:55,1075,11,101,18:06,1086,no
+R3111,D4,2026-04-07,martes,ISOIN_Sevilla,Santiponce,14:05,845,14.3,8,281.0,alto,soleado,82,15:27,927,35,117,16:02,962,no
+R3112,D4,2026-04-08,miercoles,ISOIN_Sevilla,Aeropuerto,06:55,415,12.3,14,246.7,alto,soleado,85,08:20,500,49,134,09:09,549,no
+R3113,D4,2026-04-08,miercoles,ISOIN_Sevilla,Parque Alcosa,16:35,995,14.9,10,113.0,medio,nublado,73,17:48,1068,19,92,18:07,1087,no
+R3114,D4,2026-04-08,miercoles,ISOIN_Sevilla,Santiponce,11:05,665,24.5,8,228.2,bajo,lluvia,84,12:29,749,25,109,12:54,774,no
+R3115,D4,2026-04-09,jueves,ISOIN_Sevilla,Aeropuerto,14:10,850,24.0,14,214.3,alto,soleado,111,16:01,961,43,154,16:44,1004,no
+R3116,D4,2026-04-09,jueves,ISOIN_Sevilla,Aeropuerto,06:25,385,12.3,10,91.9,bajo,soleado,66,07:31,451,3,69,07:34,454,si
+R3117,D4,2026-04-09,jueves,ISOIN_Sevilla,Aeropuerto,09:55,595,21.6,12,183.6,alto,soleado,106,11:41,701,25,131,12:06,726,no
+R3118,D4,2026-04-10,viernes,ISOIN_Sevilla,La Rinconada,08:20,500,16.6,13,183.1,alto,soleado,92,09:52,592,34,126,10:26,626,no
+R3119,D4,2026-04-10,viernes,ISOIN_Sevilla,Aeropuerto,11:10,670,15.9,15,147.6,bajo,nublado,74,12:24,744,15,89,12:39,759,no
+R3120,D4,2026-04-10,viernes,ISOIN_Sevilla,Parque Alcosa,16:35,995,14.7,15,160.7,alto,soleado,89,18:04,1084,38,127,18:42,1122,no
+R3121,D4,2026-04-11,sabado,ISOIN_Sevilla,Parque Alcosa,06:00,360,23.1,13,63.5,medio,soleado,99,07:39,459,19,118,07:58,478,no
+R3122,D4,2026-04-11,sabado,ISOIN_Sevilla,Sevilla Este,09:05,545,25.9,5,211.8,alto,nublado,105,10:50,650,37,142,11:27,687,no
+R3123,D4,2026-04-11,sabado,ISOIN_Sevilla,La Rinconada,07:05,425,11.3,12,233.3,alto,soleado,80,08:25,505,30,110,08:55,535,no
+R3124,D4,2026-04-13,lunes,ISOIN_Sevilla,Aeropuerto,14:20,860,20.7,10,212.3,medio,soleado,88,15:48,948,23,111,16:11,971,no
+R3125,D4,2026-04-13,lunes,ISOIN_Sevilla,Sevilla Este,09:55,595,20.1,16,240.3,medio,nublado,96,11:31,691,40,136,12:11,731,no
+R3126,D4,2026-04-13,lunes,ISOIN_Sevilla,La Rinconada,09:20,560,8.9,17,122.7,alto,soleado,81,10:41,641,35,116,11:16,676,no
+R3127,D4,2026-04-13,lunes,ISOIN_Sevilla,Aeropuerto,07:10,430,23.7,9,113.8,alto,soleado,109,08:59,539,31,140,09:30,570,no
+R3128,D4,2026-04-13,lunes,ISOIN_Sevilla,Parque Alcosa,09:00,540,18.0,17,293.7,medio,soleado,89,10:29,629,25,114,10:54,654,no
+R3129,D4,2026-04-13,lunes,ISOIN_Sevilla,Santiponce,09:45,585,21.3,10,247.3,alto,soleado,103,11:28,688,33,136,12:01,721,no
+R3130,D4,2026-04-14,martes,ISOIN_Sevilla,La Rinconada,07:05,425,15.0,10,84.7,bajo,soleado,65,08:10,490,4,69,08:14,494,si
+R3131,D4,2026-04-14,martes,ISOIN_Sevilla,Parque Alcosa,09:25,565,14.6,9,312.4,alto,nublado,78,10:43,643,29,107,11:12,672,no
+R3132,D4,2026-04-14,martes,ISOIN_Sevilla,La Rinconada,06:55,415,21.2,8,67.4,medio,nublado,82,08:17,497,27,109,08:44,524,no
+R3133,D4,2026-04-15,miercoles,ISOIN_Sevilla,Santiponce,08:35,515,20.9,8,248.2,medio,nublado,84,09:59,599,32,116,10:31,631,no
+R3134,D4,2026-04-15,miercoles,ISOIN_Sevilla,Santiponce,08:20,500,17.1,15,179.2,medio,nublado,94,09:54,594,23,117,10:17,617,no
+R3135,D4,2026-04-15,miercoles,ISOIN_Sevilla,Santiponce,14:10,850,21.3,11,289.1,alto,nublado,105,15:55,955,28,133,16:23,983,no
+R3136,D4,2026-04-16,jueves,ISOIN_Sevilla,La Rinconada,06:10,370,10.9,16,76.9,medio,soleado,71,07:21,441,19,90,07:40,460,no
+R3137,D4,2026-04-16,jueves,ISOIN_Sevilla,Aeropuerto,14:25,865,16.4,8,68.6,medio,soleado,80,15:45,945,10,90,15:55,955,no
+R3138,D4,2026-04-16,jueves,ISOIN_Sevilla,La Rinconada,07:20,440,26.2,10,261.3,medio,soleado,101,09:01,541,30,131,09:31,571,no
+R3139,D4,2026-04-17,viernes,ISOIN_Sevilla,Santiponce,08:20,500,17.1,17,181.6,alto,lluvia,99,09:59,599,39,138,10:38,638,no
+R3140,D4,2026-04-17,viernes,ISOIN_Sevilla,Sevilla Este,09:20,560,19.7,10,140.2,alto,soleado,99,10:59,659,23,122,11:22,682,no
+R3141,D4,2026-04-17,viernes,ISOIN_Sevilla,La Rinconada,06:05,365,11.5,11,194.5,bajo,soleado,62,07:07,427,5,67,07:12,432,si
+R3142,D4,2026-04-18,sabado,ISOIN_Sevilla,Sevilla Este,09:35,575,9.0,14,63.0,medio,nublado,66,10:41,641,20,86,11:01,661,no
+R3143,D4,2026-04-18,sabado,ISOIN_Sevilla,Santiponce,06:05,365,17.3,14,319.2,bajo,soleado,75,07:20,440,16,91,07:36,456,no
+R3144,D4,2026-04-18,sabado,ISOIN_Sevilla,La Rinconada,06:55,415,25.3,17,148.3,bajo,soleado,99,08:34,514,24,123,08:58,538,no
+R3145,D4,2026-04-20,lunes,ISOIN_Sevilla,Aeropuerto,09:45,585,8.8,13,95.6,bajo,soleado,58,10:43,643,15,73,10:58,658,no
+R3146,D4,2026-04-20,lunes,ISOIN_Sevilla,La Rinconada,06:10,370,20.2,14,282.2,bajo,soleado,88,07:38,458,27,115,08:05,485,no
+R3147,D4,2026-04-20,lunes,ISOIN_Sevilla,Sevilla Este,14:05,845,8.4,10,304.7,alto,soleado,64,15:09,909,31,95,15:40,940,no
+R3148,D4,2026-04-20,lunes,ISOIN_Sevilla,Aeropuerto,07:20,440,9.9,13,90.5,bajo,soleado,56,08:16,496,16,72,08:32,512,no
+R3149,D4,2026-04-20,lunes,ISOIN_Sevilla,Parque Alcosa,08:25,505,23.5,17,145.3,medio,soleado,102,10:07,607,27,129,10:34,634,no
+R3150,D4,2026-04-20,lunes,ISOIN_Sevilla,La Rinconada,07:25,445,25.5,8,310.5,medio,soleado,91,08:56,536,24,115,09:20,560,no

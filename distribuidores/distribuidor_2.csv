@@ -1,0 +1,151 @@
+id_reparto,distribuidor_id,fecha,dia_semana,centro_destino,zona_origen,hora_salida,hora_salida_min,distancia_km,numero_entregas,peso_total_kg,trafico,clima,duracion_estimada_min,hora_llegada_estimada,hora_llegada_estimada_min,retraso_min,duracion_real_min,hora_llegada_real,hora_llegada_real_min,puntual
+R1001,D2,2026-01-05,lunes,ISOIN_Sevilla,Dos Hermanas,07:15,435,5.8,15,196.6,bajo,lluvia,53,08:08,488,26,79,08:34,514,no
+R1002,D2,2026-01-05,lunes,ISOIN_Sevilla,Camas,09:50,590,19.0,12,77.4,medio,soleado,89,11:19,679,13,102,11:32,692,no
+R1003,D2,2026-01-05,lunes,ISOIN_Sevilla,Dos Hermanas,12:45,765,21.9,4,106.5,bajo,soleado,78,14:03,843,12,90,14:15,855,no
+R1004,D2,2026-01-06,martes,ISOIN_Sevilla,Los Remedios,07:15,435,20.7,10,85.6,medio,lluvia,90,08:45,525,33,123,09:18,558,no
+R1005,D2,2026-01-06,martes,ISOIN_Sevilla,Camas,09:15,555,18.0,14,194.9,alto,soleado,97,10:52,652,22,119,11:14,674,no
+R1006,D2,2026-01-06,martes,ISOIN_Sevilla,Triana,09:40,580,13.4,11,75.5,alto,soleado,87,11:07,667,30,117,11:37,697,no
+R1007,D2,2026-01-07,miercoles,ISOIN_Sevilla,Montequinto,07:15,435,23.0,13,62.4,medio,soleado,98,08:53,533,25,123,09:18,558,no
+R1008,D2,2026-01-07,miercoles,ISOIN_Sevilla,Montequinto,15:00,900,20.3,11,81.0,medio,soleado,89,16:29,989,12,101,16:41,1001,no
+R1009,D2,2026-01-07,miercoles,ISOIN_Sevilla,Los Remedios,13:30,810,6.9,7,189.4,bajo,nublado,50,14:20,860,6,56,14:26,866,no
+R1010,D2,2026-01-08,jueves,ISOIN_Sevilla,Montequinto,13:40,820,20.5,12,54.7,alto,soleado,107,15:27,927,35,142,16:02,962,no
+R1011,D2,2026-01-08,jueves,ISOIN_Sevilla,Montequinto,13:00,780,14.0,13,173.2,alto,soleado,89,14:29,869,38,127,15:07,907,no
+R1012,D2,2026-01-08,jueves,ISOIN_Sevilla,Triana,13:00,780,7.5,9,158.8,medio,nublado,59,13:59,839,12,71,14:11,851,no
+R1013,D2,2026-01-09,viernes,ISOIN_Sevilla,Camas,12:10,730,10.6,10,73.8,bajo,soleado,55,13:05,785,4,59,13:09,789,si
+R1014,D2,2026-01-09,viernes,ISOIN_Sevilla,Montequinto,10:20,620,22.8,5,236.2,alto,nublado,94,11:54,714,39,133,12:33,753,no
+R1015,D2,2026-01-09,viernes,ISOIN_Sevilla,Dos Hermanas,07:10,430,22.5,11,152.4,bajo,soleado,83,08:33,513,5,88,08:38,518,si
+R1016,D2,2026-01-10,sabado,ISOIN_Sevilla,Montequinto,15:50,950,9.9,3,244.1,bajo,lluvia,46,16:36,996,19,65,16:55,1015,no
+R1017,D2,2026-01-10,sabado,ISOIN_Sevilla,Triana,12:20,740,11.4,7,62.3,medio,nublado,63,13:23,803,9,72,13:32,812,no
+R1018,D2,2026-01-10,sabado,ISOIN_Sevilla,Dos Hermanas,09:40,580,15.1,8,222.4,medio,soleado,77,10:57,657,1,78,10:58,658,si
+R1019,D2,2026-01-12,lunes,ISOIN_Sevilla,Camas,15:50,950,14.4,5,187.5,medio,soleado,71,17:01,1021,10,81,17:11,1031,no
+R1020,D2,2026-01-12,lunes,ISOIN_Sevilla,Montequinto,13:30,810,15.8,11,239.6,medio,nublado,80,14:50,890,11,91,15:01,901,no
+R1021,D2,2026-01-12,lunes,ISOIN_Sevilla,Dos Hermanas,12:30,750,19.6,14,249.9,medio,soleado,94,14:04,844,33,127,14:37,877,no
+R1022,D2,2026-01-12,lunes,ISOIN_Sevilla,Los Remedios,12:45,765,7.3,13,101.9,medio,nublado,64,13:49,829,14,78,14:03,843,no
+R1023,D2,2026-01-12,lunes,ISOIN_Sevilla,Dos Hermanas,13:20,800,12.3,15,188.7,medio,nublado,76,14:36,876,18,94,14:54,894,no
+R1024,D2,2026-01-12,lunes,ISOIN_Sevilla,Montequinto,10:40,640,22.7,10,259.3,bajo,soleado,85,12:05,725,14,99,12:19,739,no
+R1025,D2,2026-01-13,martes,ISOIN_Sevilla,Camas,12:30,750,8.8,7,226.2,medio,nublado,60,13:30,810,21,81,13:51,831,no
+R1026,D2,2026-01-13,martes,ISOIN_Sevilla,Camas,07:45,465,21.5,9,237.3,alto,nublado,99,09:24,564,31,130,09:55,595,no
+R1027,D2,2026-01-13,martes,ISOIN_Sevilla,Camas,13:50,830,8.6,11,108.7,medio,soleado,61,14:51,891,12,73,15:03,903,no
+R1028,D2,2026-01-14,miercoles,ISOIN_Sevilla,Triana,13:20,800,16.6,3,68.5,medio,soleado,65,14:25,865,5,70,14:30,870,si
+R1029,D2,2026-01-14,miercoles,ISOIN_Sevilla,Dos Hermanas,10:20,620,18.9,7,120.5,medio,lluvia,77,11:37,697,31,108,12:08,728,no
+R1030,D2,2026-01-14,miercoles,ISOIN_Sevilla,Los Remedios,10:15,615,22.2,3,279.3,bajo,soleado,72,11:27,687,1,73,11:28,688,si
+R1031,D2,2026-01-15,jueves,ISOIN_Sevilla,Camas,09:50,590,23.3,11,168.2,alto,soleado,111,11:41,701,23,134,12:04,724,no
+R1032,D2,2026-01-15,jueves,ISOIN_Sevilla,Camas,08:50,530,16.8,14,88.8,alto,nublado,103,10:33,633,34,137,11:07,667,no
+R1033,D2,2026-01-15,jueves,ISOIN_Sevilla,Dos Hermanas,12:40,760,6.1,13,67.4,alto,soleado,71,13:51,831,21,92,14:12,852,no
+R1034,D2,2026-01-16,viernes,ISOIN_Sevilla,Dos Hermanas,15:30,930,22.6,7,181.9,medio,soleado,89,16:59,1019,8,97,17:07,1027,no
+R1035,D2,2026-01-16,viernes,ISOIN_Sevilla,Dos Hermanas,09:15,555,12.2,11,261.9,alto,nublado,79,10:34,634,34,113,11:08,668,no
+R1036,D2,2026-01-16,viernes,ISOIN_Sevilla,Los Remedios,08:50,530,7.4,14,277.4,medio,nublado,70,10:00,600,26,96,10:26,626,no
+R1037,D2,2026-01-17,sabado,ISOIN_Sevilla,Montequinto,10:40,640,6.0,12,71.4,medio,lluvia,59,11:39,699,29,88,12:08,728,no
+R1038,D2,2026-01-17,sabado,ISOIN_Sevilla,Dos Hermanas,07:20,440,18.1,10,66.4,medio,nublado,86,08:46,526,14,100,09:00,540,no
+R1039,D2,2026-01-17,sabado,ISOIN_Sevilla,Montequinto,10:30,630,18.2,9,104.8,bajo,soleado,71,11:41,701,4,75,11:45,705,si
+R1040,D2,2026-01-19,lunes,ISOIN_Sevilla,Triana,12:00,720,22.3,4,276.7,medio,soleado,80,13:20,800,21,101,13:41,821,no
+R1041,D2,2026-01-19,lunes,ISOIN_Sevilla,Dos Hermanas,10:10,610,17.5,13,250.5,bajo,nublado,76,11:26,686,14,90,11:40,700,no
+R1042,D2,2026-01-19,lunes,ISOIN_Sevilla,Los Remedios,15:00,900,18.9,7,153.8,alto,soleado,92,16:32,992,24,116,16:56,1016,no
+R1043,D2,2026-01-19,lunes,ISOIN_Sevilla,Los Remedios,09:20,560,22.3,14,224.9,bajo,nublado,97,10:57,657,3,100,11:00,660,si
+R1044,D2,2026-01-19,lunes,ISOIN_Sevilla,Dos Hermanas,12:00,720,9.1,3,139.5,bajo,soleado,39,12:39,759,4,43,12:43,763,si
+R1045,D2,2026-01-19,lunes,ISOIN_Sevilla,Camas,08:40,520,15.5,15,203.0,medio,soleado,85,10:05,605,20,105,10:25,625,no
+R1046,D2,2026-01-20,martes,ISOIN_Sevilla,Camas,07:15,435,16.4,9,175.6,bajo,soleado,72,08:27,507,7,79,08:34,514,no
+R1047,D2,2026-01-20,martes,ISOIN_Sevilla,Dos Hermanas,10:15,615,10.2,5,222.3,medio,nublado,57,11:12,672,18,75,11:30,690,no
+R1048,D2,2026-01-20,martes,ISOIN_Sevilla,Dos Hermanas,12:15,735,11.9,7,92.8,medio,lluvia,65,13:20,800,11,76,13:31,811,no
+R1049,D2,2026-01-21,miercoles,ISOIN_Sevilla,Dos Hermanas,13:00,780,21.1,6,234.1,medio,nublado,82,14:22,862,18,100,14:40,880,no
+R1050,D2,2026-01-21,miercoles,ISOIN_Sevilla,Los Remedios,13:10,790,18.7,15,157.5,medio,nublado,93,14:43,883,25,118,15:08,908,no
+R1051,D2,2026-01-21,miercoles,ISOIN_Sevilla,Dos Hermanas,12:40,760,10.4,8,165.5,medio,soleado,66,13:46,826,10,76,13:56,836,no
+R1052,D2,2026-01-22,jueves,ISOIN_Sevilla,Camas,10:00,600,15.2,6,219.2,bajo,soleado,67,11:07,667,16,83,11:23,683,no
+R1053,D2,2026-01-22,jueves,ISOIN_Sevilla,Camas,08:20,500,10.8,9,178.9,medio,soleado,66,09:26,566,15,81,09:41,581,no
+R1054,D2,2026-01-22,jueves,ISOIN_Sevilla,Dos Hermanas,08:40,520,7.7,14,173.4,medio,lluvia,64,09:44,584,21,85,10:05,605,no
+R1055,D2,2026-01-23,viernes,ISOIN_Sevilla,Triana,10:15,615,20.5,6,61.0,bajo,soleado,76,11:31,691,8,84,11:39,699,no
+R1056,D2,2026-01-23,viernes,ISOIN_Sevilla,Dos Hermanas,07:00,420,14.6,9,47.8,medio,soleado,74,08:14,494,5,79,08:19,499,si
+R1057,D2,2026-01-23,viernes,ISOIN_Sevilla,Triana,07:15,435,9.1,12,168.7,medio,soleado,69,08:24,504,16,85,08:40,520,no
+R1058,D2,2026-01-24,sabado,ISOIN_Sevilla,Montequinto,08:20,500,10.2,4,198.6,alto,nublado,62,09:22,562,33,95,09:55,595,no
+R1059,D2,2026-01-24,sabado,ISOIN_Sevilla,Dos Hermanas,07:00,420,17.9,4,162.5,bajo,nublado,69,08:09,489,0,69,08:09,489,si
+R1060,D2,2026-01-24,sabado,ISOIN_Sevilla,Los Remedios,08:50,530,9.7,4,205.8,medio,soleado,50,09:40,580,4,54,09:44,584,si
+R1061,D2,2026-01-26,lunes,ISOIN_Sevilla,Los Remedios,12:15,735,18.8,14,237.9,alto,soleado,107,14:02,842,43,150,14:45,885,no
+R1062,D2,2026-01-26,lunes,ISOIN_Sevilla,Los Remedios,15:10,910,14.0,8,57.6,bajo,nublado,64,16:14,974,13,77,16:27,987,no
+R1063,D2,2026-01-26,lunes,ISOIN_Sevilla,Camas,07:30,450,19.4,10,160.3,bajo,lluvia,80,08:50,530,24,104,09:14,554,no
+R1064,D2,2026-01-26,lunes,ISOIN_Sevilla,Triana,15:30,930,19.7,14,62.3,bajo,soleado,84,16:54,1014,10,94,17:04,1024,no
+R1065,D2,2026-01-26,lunes,ISOIN_Sevilla,Triana,07:30,450,12.9,15,108.4,bajo,soleado,76,08:46,526,17,93,09:03,543,no
+R1066,D2,2026-01-26,lunes,ISOIN_Sevilla,Dos Hermanas,07:00,420,6.2,11,66.9,medio,soleado,61,08:01,481,7,68,08:08,488,no
+R1067,D2,2026-01-27,martes,ISOIN_Sevilla,Dos Hermanas,15:10,910,18.3,11,257.7,alto,soleado,94,16:44,1004,36,130,17:20,1040,no
+R1068,D2,2026-01-27,martes,ISOIN_Sevilla,Camas,09:50,590,7.3,5,147.1,medio,soleado,48,10:38,638,9,57,10:47,647,no
+R1069,D2,2026-01-27,martes,ISOIN_Sevilla,Dos Hermanas,12:20,740,13.2,5,116.6,alto,soleado,79,13:39,819,27,106,14:06,846,no
+R1070,D2,2026-01-28,miercoles,ISOIN_Sevilla,Camas,10:15,615,10.2,12,267.6,bajo,soleado,64,11:19,679,18,82,11:37,697,no
+R1071,D2,2026-01-28,miercoles,ISOIN_Sevilla,Montequinto,15:20,920,10.7,7,236.9,bajo,soleado,59,16:19,979,11,70,16:30,990,no
+R1072,D2,2026-01-28,miercoles,ISOIN_Sevilla,Los Remedios,13:00,780,22.6,10,266.6,medio,nublado,90,14:30,870,25,115,14:55,895,no
+R1073,D2,2026-01-29,jueves,ISOIN_Sevilla,Camas,13:15,795,18.1,15,133.6,medio,soleado,97,14:52,892,23,120,15:15,915,no
+R1074,D2,2026-01-29,jueves,ISOIN_Sevilla,Montequinto,12:10,730,6.6,6,199.5,bajo,nublado,39,12:49,769,14,53,13:03,783,no
+R1075,D2,2026-01-29,jueves,ISOIN_Sevilla,Camas,15:45,945,6.5,4,105.8,medio,soleado,52,16:37,997,16,68,16:53,1013,no
+R1076,D2,2026-01-30,viernes,ISOIN_Sevilla,Camas,10:50,650,19.2,12,207.3,bajo,lluvia,84,12:14,734,14,98,12:28,748,no
+R1077,D2,2026-01-30,viernes,ISOIN_Sevilla,Los Remedios,09:30,570,11.0,15,93.6,medio,soleado,80,10:50,650,16,96,11:06,666,no
+R1078,D2,2026-01-30,viernes,ISOIN_Sevilla,Triana,15:10,910,4.9,8,197.3,medio,soleado,50,16:00,960,15,65,16:15,975,no
+R1079,D2,2026-01-31,sabado,ISOIN_Sevilla,Los Remedios,09:45,585,22.7,6,232.5,alto,soleado,98,11:23,683,26,124,11:49,709,no
+R1080,D2,2026-01-31,sabado,ISOIN_Sevilla,Dos Hermanas,12:45,765,11.9,14,95.5,bajo,nublado,66,13:51,831,20,86,14:11,851,no
+R1081,D2,2026-01-31,sabado,ISOIN_Sevilla,Los Remedios,09:40,580,8.2,4,106.7,alto,soleado,62,10:42,642,31,93,11:13,673,no
+R1082,D2,2026-02-02,lunes,ISOIN_Sevilla,Montequinto,07:40,460,11.2,10,190.1,medio,nublado,68,08:48,528,14,82,09:02,542,no
+R1083,D2,2026-02-02,lunes,ISOIN_Sevilla,Camas,07:20,440,10.3,5,132.7,bajo,soleado,54,08:14,494,2,56,08:16,496,si
+R1084,D2,2026-02-02,lunes,ISOIN_Sevilla,Dos Hermanas,08:50,530,16.6,14,261.0,alto,soleado,95,10:25,625,32,127,10:57,657,no
+R1085,D2,2026-02-02,lunes,ISOIN_Sevilla,Dos Hermanas,12:00,720,20.9,3,158.9,bajo,soleado,73,13:13,793,16,89,13:29,809,no
+R1086,D2,2026-02-02,lunes,ISOIN_Sevilla,Dos Hermanas,13:50,830,12.4,10,159.8,bajo,soleado,62,14:52,892,0,62,14:52,892,si
+R1087,D2,2026-02-02,lunes,ISOIN_Sevilla,Camas,08:30,510,7.7,10,177.9,alto,soleado,74,09:44,584,12,86,09:56,596,no
+R1088,D2,2026-02-03,martes,ISOIN_Sevilla,Montequinto,15:40,940,14.8,15,54.8,medio,soleado,87,17:07,1027,6,93,17:13,1033,no
+R1089,D2,2026-02-03,martes,ISOIN_Sevilla,Dos Hermanas,09:40,580,20.9,4,148.2,alto,nublado,88,11:08,668,35,123,11:43,703,no
+R1090,D2,2026-02-03,martes,ISOIN_Sevilla,Los Remedios,12:15,735,19.4,6,234.3,medio,soleado,84,13:39,819,22,106,14:01,841,no
+R1091,D2,2026-02-04,miercoles,ISOIN_Sevilla,Camas,12:30,750,22.6,11,276.6,medio,soleado,97,14:07,847,18,115,14:25,865,no
+R1092,D2,2026-02-04,miercoles,ISOIN_Sevilla,Los Remedios,08:15,495,18.0,6,223.9,alto,soleado,91,09:46,586,35,126,10:21,621,no
+R1093,D2,2026-02-04,miercoles,ISOIN_Sevilla,Dos Hermanas,10:10,610,16.5,15,66.9,medio,soleado,90,11:40,700,16,106,11:56,716,no
+R1094,D2,2026-02-05,jueves,ISOIN_Sevilla,Triana,13:50,830,16.6,14,129.2,bajo,soleado,78,15:08,908,12,90,15:20,920,no
+R1095,D2,2026-02-05,jueves,ISOIN_Sevilla,Dos Hermanas,09:40,580,20.2,8,173.6,bajo,nublado,77,10:57,657,7,84,11:04,664,no
+R1096,D2,2026-02-05,jueves,ISOIN_Sevilla,Dos Hermanas,07:10,430,22.2,5,148.7,bajo,lluvia,74,08:24,504,18,92,08:42,522,no
+R1097,D2,2026-02-06,viernes,ISOIN_Sevilla,Camas,07:40,460,9.3,8,201.2,medio,soleado,60,08:40,520,7,67,08:47,527,no
+R1098,D2,2026-02-06,viernes,ISOIN_Sevilla,Triana,07:20,440,13.6,5,184.5,medio,soleado,60,08:20,500,9,69,08:29,509,no
+R1099,D2,2026-02-06,viernes,ISOIN_Sevilla,Los Remedios,10:10,610,8.8,4,216.7,bajo,soleado,44,10:54,654,3,47,10:57,657,si
+R1100,D2,2026-02-07,sabado,ISOIN_Sevilla,Los Remedios,07:00,420,16.1,5,148.4,medio,nublado,68,08:08,488,12,80,08:20,500,no
+R1101,D2,2026-02-07,sabado,ISOIN_Sevilla,Triana,08:10,490,15.7,9,127.6,medio,nublado,75,09:25,565,11,86,09:36,576,no
+R1102,D2,2026-02-07,sabado,ISOIN_Sevilla,Montequinto,12:30,750,19.3,14,51.3,medio,nublado,92,14:02,842,23,115,14:25,865,no
+R1103,D2,2026-02-09,lunes,ISOIN_Sevilla,Los Remedios,10:45,645,6.6,10,194.9,bajo,lluvia,46,11:31,691,12,58,11:43,703,no
+R1104,D2,2026-02-09,lunes,ISOIN_Sevilla,Dos Hermanas,15:45,945,11.4,13,85.6,medio,lluvia,71,16:56,1016,12,83,17:08,1028,no
+R1105,D2,2026-02-09,lunes,ISOIN_Sevilla,Triana,07:45,465,14.1,13,212.5,medio,soleado,82,09:07,547,11,93,09:18,558,no
+R1106,D2,2026-02-09,lunes,ISOIN_Sevilla,Triana,12:20,740,23.0,5,171.1,bajo,nublado,74,13:34,814,11,85,13:45,825,no
+R1107,D2,2026-02-09,lunes,ISOIN_Sevilla,Triana,08:10,490,22.1,4,151.5,alto,soleado,89,09:39,579,14,103,09:53,593,no
+R1108,D2,2026-02-09,lunes,ISOIN_Sevilla,Triana,08:50,530,22.6,11,166.5,alto,soleado,106,10:36,636,22,128,10:58,658,no
+R1109,D2,2026-02-10,martes,ISOIN_Sevilla,Triana,09:45,585,9.7,4,106.8,alto,nublado,67,10:52,652,29,96,11:21,681,no
+R1110,D2,2026-02-10,martes,ISOIN_Sevilla,Montequinto,08:40,520,7.5,15,69.2,medio,nublado,68,09:48,588,14,82,10:02,602,no
+R1111,D2,2026-02-10,martes,ISOIN_Sevilla,Los Remedios,07:50,470,11.4,5,87.1,alto,soleado,72,09:02,542,20,92,09:22,562,no
+R1112,D2,2026-02-11,miercoles,ISOIN_Sevilla,Dos Hermanas,13:40,820,9.7,4,179.3,bajo,nublado,42,14:22,862,5,47,14:27,867,si
+R1113,D2,2026-02-11,miercoles,ISOIN_Sevilla,Triana,10:10,610,21.2,7,226.8,bajo,soleado,80,11:30,690,5,85,11:35,695,si
+R1114,D2,2026-02-11,miercoles,ISOIN_Sevilla,Montequinto,15:30,930,18.6,6,154.0,medio,soleado,76,16:46,1006,11,87,16:57,1017,no
+R1115,D2,2026-02-12,jueves,ISOIN_Sevilla,Dos Hermanas,07:20,440,14.8,13,242.3,alto,lluvia,87,08:47,527,50,137,09:37,577,no
+R1116,D2,2026-02-12,jueves,ISOIN_Sevilla,Los Remedios,10:50,650,22.8,5,212.2,bajo,lluvia,81,12:11,731,24,105,12:35,755,no
+R1117,D2,2026-02-12,jueves,ISOIN_Sevilla,Montequinto,07:15,435,16.6,9,62.6,medio,soleado,76,08:31,511,8,84,08:39,519,no
+R1118,D2,2026-02-13,viernes,ISOIN_Sevilla,Camas,15:45,945,17.8,14,121.7,medio,soleado,89,17:14,1034,5,94,17:19,1039,si
+R1119,D2,2026-02-13,viernes,ISOIN_Sevilla,Los Remedios,10:50,650,10.5,4,170.9,alto,soleado,66,11:56,716,20,86,12:16,736,no
+R1120,D2,2026-02-13,viernes,ISOIN_Sevilla,Triana,08:30,510,20.2,14,186.8,medio,nublado,93,10:03,603,15,108,10:18,618,no
+R1121,D2,2026-02-14,sabado,ISOIN_Sevilla,Camas,09:15,555,5.1,9,245.8,medio,soleado,50,10:05,605,15,65,10:20,620,no
+R1122,D2,2026-02-14,sabado,ISOIN_Sevilla,Triana,07:00,420,20.3,6,75.7,medio,soleado,78,08:18,498,12,90,08:30,510,no
+R1123,D2,2026-02-14,sabado,ISOIN_Sevilla,Triana,08:50,530,19.9,4,257.7,alto,soleado,82,10:12,612,27,109,10:39,639,no
+R1124,D2,2026-02-16,lunes,ISOIN_Sevilla,Dos Hermanas,10:00,600,11.8,9,85.6,medio,soleado,68,11:08,668,6,74,11:14,674,no
+R1125,D2,2026-02-16,lunes,ISOIN_Sevilla,Montequinto,12:20,740,16.8,10,141.8,medio,soleado,80,13:40,820,11,91,13:51,831,no
+R1126,D2,2026-02-16,lunes,ISOIN_Sevilla,Los Remedios,13:20,800,16.5,15,172.8,bajo,soleado,82,14:42,882,15,97,14:57,897,no
+R1127,D2,2026-02-16,lunes,ISOIN_Sevilla,Camas,12:40,760,11.9,5,51.1,medio,soleado,61,13:41,821,12,73,13:53,833,no
+R1128,D2,2026-02-16,lunes,ISOIN_Sevilla,Camas,15:20,920,23.0,4,103.2,bajo,soleado,71,16:31,991,9,80,16:40,1000,no
+R1129,D2,2026-02-16,lunes,ISOIN_Sevilla,Camas,15:15,915,7.8,12,119.7,medio,soleado,69,16:24,984,11,80,16:35,995,no
+R1130,D2,2026-02-17,martes,ISOIN_Sevilla,Montequinto,08:50,530,14.8,5,160.3,bajo,soleado,58,09:48,588,2,60,09:50,590,si
+R1131,D2,2026-02-17,martes,ISOIN_Sevilla,Dos Hermanas,07:40,460,21.9,6,234.5,bajo,soleado,77,08:57,537,1,78,08:58,538,si
+R1132,D2,2026-02-17,martes,ISOIN_Sevilla,Triana,15:40,940,22.8,8,210.6,medio,soleado,91,17:11,1031,18,109,17:29,1049,no
+R1133,D2,2026-02-18,miercoles,ISOIN_Sevilla,Dos Hermanas,13:40,820,7.8,11,208.0,alto,nublado,71,14:51,891,26,97,15:17,917,no
+R1134,D2,2026-02-18,miercoles,ISOIN_Sevilla,Camas,08:15,495,18.3,14,267.9,medio,lluvia,96,09:51,591,36,132,10:27,627,no
+R1135,D2,2026-02-18,miercoles,ISOIN_Sevilla,Montequinto,07:50,470,7.2,14,63.3,bajo,soleado,56,08:46,526,17,73,09:03,543,no
+R1136,D2,2026-02-19,jueves,ISOIN_Sevilla,Dos Hermanas,07:30,450,8.5,14,60.9,bajo,soleado,57,08:27,507,7,64,08:34,514,no
+R1137,D2,2026-02-19,jueves,ISOIN_Sevilla,Dos Hermanas,08:45,525,13.9,9,127.5,medio,nublado,77,10:02,602,18,95,10:20,620,no
+R1138,D2,2026-02-19,jueves,ISOIN_Sevilla,Triana,15:00,900,10.1,8,106.4,bajo,soleado,56,15:56,956,0,56,15:56,956,si
+R1139,D2,2026-02-20,viernes,ISOIN_Sevilla,Montequinto,07:40,460,15.8,12,254.9,medio,soleado,80,09:00,540,19,99,09:19,559,no
+R1140,D2,2026-02-20,viernes,ISOIN_Sevilla,Camas,08:20,500,12.3,11,214.7,alto,soleado,82,09:42,582,17,99,09:59,599,no
+R1141,D2,2026-02-20,viernes,ISOIN_Sevilla,Dos Hermanas,12:50,770,7.4,8,45.9,bajo,nublado,53,13:43,823,3,56,13:46,826,si
+R1142,D2,2026-02-21,sabado,ISOIN_Sevilla,Triana,08:15,495,16.6,4,156.3,bajo,nublado,64,09:19,559,10,74,09:29,569,no
+R1143,D2,2026-02-21,sabado,ISOIN_Sevilla,Triana,13:45,825,8.0,9,131.8,medio,soleado,62,14:47,887,8,70,14:55,895,no
+R1144,D2,2026-02-21,sabado,ISOIN_Sevilla,Montequinto,07:15,435,18.8,13,67.7,medio,nublado,92,08:47,527,29,121,09:16,556,no
+R1145,D2,2026-02-23,lunes,ISOIN_Sevilla,Dos Hermanas,12:50,770,15.4,6,156.9,bajo,lluvia,58,13:48,828,25,83,14:13,853,no
+R1146,D2,2026-02-23,lunes,ISOIN_Sevilla,Montequinto,13:15,795,6.8,15,150.5,alto,soleado,76,14:31,871,20,96,14:51,891,no
+R1147,D2,2026-02-23,lunes,ISOIN_Sevilla,Triana,13:45,825,8.3,13,79.8,medio,soleado,64,14:49,889,17,81,15:06,906,no
+R1148,D2,2026-02-23,lunes,ISOIN_Sevilla,Montequinto,09:30,570,14.4,3,229.8,alto,soleado,75,10:45,645,23,98,11:08,668,no
+R1149,D2,2026-02-23,lunes,ISOIN_Sevilla,Montequinto,12:10,730,22.1,12,228.2,medio,nublado,97,13:47,827,36,133,14:23,863,no
+R1150,D2,2026-02-23,lunes,ISOIN_Sevilla,Triana,08:30,510,12.2,12,188.0,alto,soleado,85,09:55,595,23,108,10:18,618,no
