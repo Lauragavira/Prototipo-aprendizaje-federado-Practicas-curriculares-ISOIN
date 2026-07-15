@@ -1,696 +1,376 @@
-import json
-import os
-import subprocess
-import time
-
-import pandas as pd
-import plotly.express as px
+import sys
 import streamlit as st
-
+import subprocess
+import json
+import pandas as pd
+import os
+import plotly.express as px
+import glob
+import socket
+import shutil
 
 st.set_page_config(page_title="Panel de Aprendizaje Federado", layout="wide")
 st.title("🌸 Panel de Control: Entrenamiento Federado")
 
+# --- FUNCIÓN AUXILIAR PARA OBTENER LA IP DE TU MÁQUINA ---
+def obtener_ip_local():
+    try:
+        # Se abre una conexión UDP temporal para detectar la interfaz de red activa
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "127.0.0.1"
+
+# --- INICIALIZACIÓN DE PROCESOS ---
+# Ahora controlamos dos procesos independientes: el SuperLink (red) y la ServerApp (entrenamiento)
+if "superlink_process" not in st.session_state:
+    st.session_state.superlink_process = None
+
+if "server_app_process" not in st.session_state:
+    st.session_state.server_app_process = None
+
+# Comprobamos los estados de ambos procesos de forma asíncrona
+superlink_activo = False
+if st.session_state.superlink_process is not None:
+    if st.session_state.superlink_process.poll() is None:
+        superlink_activo = True
+    else:
+        st.session_state.superlink_process = None
+
+entrenamiento_en_curso = False
+if st.session_state.server_app_process is not None:
+    if st.session_state.server_app_process.poll() is None:
+        entrenamiento_en_curso = True
+    else:
+        st.session_state.server_app_process = None
 
 ALL_METRICS = ["loss", "accuracy", "mae", "rmse", "r2"]
-
 METRICAS_PREDETERMINADAS = {
     "task_mnist": ["loss", "accuracy"],
     "task_noIID_mnist": ["loss", "accuracy"],
     "task_logistica": ["mae", "rmse", "r2"],
+    "task_regresion_logistica": ["loss", "accuracy"],
 }
-
 METRICAS_DISPONIBLES = {
-    "task_mnist": {"loss", "accuracy"},
+    "task_mnist": {"loss", "accuracy","rmse", "r2"},
     "task_noIID_mnist": {"loss", "accuracy"},
-    # En regresión, Flower usa MAE como loss principal.
     "task_logistica": {"loss", "mae", "rmse", "r2"},
+    "task_regresion_logistica": {"loss", "accuracy","rmse", "r2"},
 }
 
 CONFIG_METRICAS = {
-    "loss": {
-        "nombre": "Loss",
-        "kpi": "Pérdida global (Loss)",
-        "titulo": "📉 Evolución de la pérdida",
-        "formato": ".4f",
-        "delta_color": "inverse",
-        "color": "#ff4b4b",
-    },
-    "accuracy": {
-        "nombre": "Accuracy",
-        "kpi": "Precisión global (Accuracy)",
-        "titulo": "🎯 Evolución de la precisión",
-        "formato": ".2%",
-        "delta_color": "normal",
-        "color": "#21c354",
-    },
-    "mae": {
-        "nombre": "MAE",
-        "kpi": "MAE medio",
-        "titulo": "📉 Evolución del MAE",
-        "formato": ".2f",
-        "sufijo": " min",
-        "delta_color": "inverse",
-        "color": "#ff4b4b",
-    },
-    "rmse": {
-        "nombre": "RMSE",
-        "kpi": "RMSE medio",
-        "titulo": "📊 Evolución del RMSE",
-        "formato": ".2f",
-        "sufijo": " min",
-        "delta_color": "inverse",
-        "color": "#ff9f1c",
-    },
-    "r2": {
-        "nombre": "R²",
-        "kpi": "R² global",
-        "titulo": "🎯 Evolución del R²",
-        "formato": ".4f",
-        "delta_color": "normal",
-        "color": "#21c354",
-    },
+    "loss": {"nombre": "Loss", "kpi": "Pérdida global (Loss)", "titulo": "📉 Evolución de la pérdida", "formato": ".4f", "delta_color": "inverse", "color": "#ff4b4b"},
+    "accuracy": {"nombre": "Accuracy", "kpi": "Precisión global", "titulo": "🎯 Evolución de la precisión", "formato": ".2%", "delta_color": "normal", "color": "#21c354"},
+    "mae": {"nombre": "MAE", "kpi": "MAE medio", "titulo": "📉 Evolución del MAE", "formato": ".2f", "sufijo": " min", "delta_color": "inverse", "color": "#ff4b4b"},
+    "rmse": {"nombre": "RMSE", "kpi": "RMSE medio", "titulo": "📊 Evolución del RMSE", "formato": ".2f", "sufijo": " min", "delta_color": "inverse", "color": "#ff9f1c"},
+    "r2": {"nombre": "R²", "kpi": "R² global", "titulo": "🎯 Evolución del R²", "formato": ".4f", "delta_color": "normal", "color": "#21c354"},
 }
 
-
-if "server_process" not in st.session_state:
-    st.session_state.server_process = None
-
-if "client_processes" not in st.session_state:
-    st.session_state.client_processes = []
-
-
+# --- BARRA LATERAL ---
 with st.sidebar:
-    st.header("📦 Definición del Problema")
-
-    tarea = st.selectbox(
-        "Tarea a ejecutar",
-        ["task_mnist", "task_noIID_mnist", "task_logistica"],
-        key="task_select",
+    # Mostrar datos de conexión para las otras portátiles
+    ip_servidor = obtener_ip_local()
+    st.success(f"🖥️ **Tu IP Local:** `{ip_servidor}`")
+    
+    st.info(
+        f"**Comando de conexión:**\n\n"
+        f"```bash\n"
+        f"flwr-supernode --insecure --superlink {ip_servidor}:9092\n"
+        f"```"
     )
+    st.divider()
 
-    st.caption("Añade más archivos 'task_algo.py' y ponlos en esta lista.")
+    st.header("🌐 Control de Red (SuperLink)")
+    # Gestión del proceso SuperLink en el puerto 9092
+    if not superlink_activo:
+        start_superlink = st.button("🌐 Levantar SuperLink", width='stretch')
+        stop_superlink = False
+    else:
+        st.write("🟢 SuperLink en ejecución (Puerto 9092)")
+        stop_superlink = st.button("🛑 Detener SuperLink", type="primary", width='stretch')
+        start_superlink = False
 
-    st.subheader("📏 Métricas a medir")
+    st.divider()
+
+    st.header("📦 Definición del Problema")
+    ruta_tareas_carpeta = os.path.join("task", "*.py")
+    archivos_tarea = glob.glob(ruta_tareas_carpeta)
+    
+    nombres_tarea = sorted(list(set([
+        os.path.basename(f).replace(".py", "") 
+        for f in archivos_tarea 
+        if not os.path.basename(f).startswith("__")
+    ])))
+    
+    if not nombres_tarea:
+        nombres_tarea = ["task_mnist", "task_noIID_mnist", "task_logistica"]
+    
+    tarea = st.selectbox("Tarea a ejecutar", nombres_tarea, key="task_select")
+    
+    st.subheader("Measuring Metrics")
     selected_metrics = []
-
-    for metrica in ALL_METRICS:
-        marcada = st.checkbox(
-            CONFIG_METRICAS[metrica]["nombre"],
-            value=metrica in METRICAS_PREDETERMINADAS[tarea],
-            key=f"metric_{tarea}_{metrica}",
-        )
+    predeterminadas = METRICAS_PREDETERMINADAS.get(tarea, ["loss", "accuracy"])
+    for m in ALL_METRICS:
+        marcada = st.checkbox(CONFIG_METRICAS[m]["nombre"], value=(m in predeterminadas), key=f"chk_{m}")
         if marcada:
-            selected_metrics.append(metrica)
-
-    metricas_no_disponibles = [
-        metrica
-        for metrica in selected_metrics
-        if metrica not in METRICAS_DISPONIBLES[tarea]
-    ]
-
-    if not selected_metrics:
-        st.warning("Selecciona al menos una métrica.")
-    elif metricas_no_disponibles:
-        nombres_no_disponibles = ", ".join(
-            CONFIG_METRICAS[metrica]["nombre"]
-            for metrica in metricas_no_disponibles
-        )
-        st.warning(
-            f"{nombres_no_disponibles} no se calcula en {tarea} y no tendrá gráfica."
-        )
+            selected_metrics.append(m)
 
     st.header("⚙️ Parámetros del Servidor")
-
-    num_rounds = st.slider(
-        "Número de Rondas",
-        1,
-        50,
-        5,
-        key="rounds_slider",
-    )
+    num_rounds = st.slider("Número de Rondas", 1, 50, 5)
+    usar_checkpoints = st.checkbox("💾 Usar checkpoints (Reanudar)", value=False)
 
     selected_distributors = []
     distributor_selection_valid = True
 
     if tarea == "task_logistica":
         data_distribution = "No-IID real"
-        st.info(
-            "Esta tarea usa los CSV reales de distribuidores. "
-            "Selecciona libremente 2, 3 o 4 distribuidores."
-        )
 
         selected_distributors = st.multiselect(
             "Distribuidores a comparar",
-            options=[1, 2, 3, 4],
+            [1, 2, 3, 4],
             default=[1, 2],
-            max_selections=4,
-            format_func=lambda distributor_id: (
-                f"Distribuidor {distributor_id}"
-            ),
-            key="selected_distributors",
+            format_func=lambda x: f"Distribuidor {x}"
         )
-        selected_distributors = [
-            int(distributor_id)
-            for distributor_id in selected_distributors
-        ]
 
-        # En logística, cada distribuidor seleccionado es un cliente Flower.
         min_clients = len(selected_distributors)
         distributor_selection_valid = 2 <= min_clients <= 4
 
-        if not distributor_selection_valid:
-            st.warning("Selecciona entre 2 y 4 distribuidores.")
-        else:
-            selected_text = ", ".join(
-                f"D{distributor_id}"
-                for distributor_id in selected_distributors
-            )
-            st.success(
-                f"Clientes seleccionados: {min_clients}. "
-                f"Participarán: {selected_text}"
-            )
-    else:
-        min_clients = int(
-            st.selectbox(
-                "Clientes a simular",
-                options=[2, 3, 4],
-                index=0,
-                key="clients_input",
-                help=(
-                    "El simulador requiere un mínimo de 2 clientes y "
-                    "permite un máximo de 4."
-                ),
-            )
+    elif tarea == "task_regresion_logistica":
+        data_distribution = "No-IID real"
+
+        min_clients = st.selectbox(
+            "Clientes esperados",
+            [2, 3, 4],
+            index=0
         )
 
-        if tarea == "task_noIID_mnist":
-            data_distribution = "No-IID"
-            st.info(
-                "Esta tarea usa datos No-IID: cada cliente recibe "
-                "clases distintas."
-            )
-        else:
-            data_distribution = "IID"
-            st.info(
-                "Esta tarea usa datos IID: los clientes reciben datos "
-                "equilibrados."
-            )
+        selected_distributors = list(range(1, min_clients + 1))
+        distributor_selection_valid = True
 
+    else:
+        min_clients = st.selectbox("Clientes esperados", [2, 3, 4], index=0)
+        data_distribution = "No-IID" if "noIID" in tarea else "IID"
+
+    # --- Privacidad Diferencial ---
+    st.subheader("🛡️ Privacidad Diferencial")
     privacy_budget = st.selectbox(
         "Presupuesto de privacidad ε",
-        [
-            "Sin DP",
-            "ε = 20.0  → privacidad muy baja",
-            "ε = 10.0  → privacidad baja",
-            "ε = 5.0   → privacidad media",
-            "ε = 1.0   → privacidad alta",
-            "ε = 0.5   → privacidad muy alta",
-            "ε = 0.1   → privacidad extrema",
-        ],
-        key="epsilon_select",
+        ["Sin DP", "ε = 20.0 (Baja)", "ε = 10.0", "ε = 5.0 (Media)", "ε = 1.0 (Alta)", "ε = 0.5", "ε = 0.1 (Extrema)"]
     )
-
-    epsilon_values = {
-        "Sin DP": None,
-        "ε = 20.0  → privacidad muy baja": 20.0,
-        "ε = 10.0  → privacidad baja": 10.0,
-        "ε = 5.0   → privacidad media": 5.0,
-        "ε = 1.0   → privacidad alta": 1.0,
-        "ε = 0.5   → privacidad muy alta": 0.5,
-        "ε = 0.1   → privacidad extrema": 0.1,
-    }
-
-    epsilon_to_noise = {
-        None: 0.0,
-        20.0: 0.001,
-        10.0: 0.005,
-        5.0: 0.02,
-        1.0: 0.08,
-        0.5: 0.15,
-        0.1: 0.30,
-    }
-
+    epsilon_values = {"Sin DP": None, "ε = 20.0 (Baja)": 20.0, "ε = 10.0": 10.0, "ε = 5.0 (Media)": 5.0, "ε = 1.0 (Alta)": 1.0, "ε = 0.5": 0.5, "ε = 0.1 (Extrema)": 0.1}
+    epsilon_to_noise = {None: 0.0, 20.0: 0.001, 10.0: 0.005, 5.0: 0.02, 1.0: 0.08, 0.5: 0.15, 0.1: 0.30}
     privacy_epsilon = epsilon_values[privacy_budget]
     dp_noise = epsilon_to_noise[privacy_epsilon]
 
-    st.caption("Cuanto menor es ε, mayor privacidad y más ruido añadido.")
-
-    porcentaje = st.slider(
-        "Participación por ronda (%)",
-        10,
-        100,
-        100,
-        step=10,
-        key="fraction_slider",
-    )
+    porcentaje = st.slider("Participación por ronda (%)", 10, 100, 100, step=10)
     fraction_val = porcentaje / 100.0
 
-    st.header("🧮 Estrategia de Agregación")
-
-    estrategia = st.selectbox(
-        "Algoritmo",
-        ["FedAvg", "FedProx", "FedMedian"],
-        key="strategy_select",
-    )
-
-    mu_val = 0.0
-    if estrategia == "FedProx":
-        mu_val = st.number_input(
-            "Término Proximal (μ)",
-            0.0,
-            5.0,
-            0.1,
-            step=0.1,
-            key="mu_input",
-        )
+    st.header("🧮 Estrategia")
+    estrategia = st.selectbox("Algoritmo", ["FedAvg", "FedProx", "FedMedian"])
+    mu_val = st.number_input("Término Proximal (μ)", 0.0, 5.0, 0.1, step=0.1) if estrategia == "FedProx" else 0.0
 
     st.header("🧠 Hiperparámetros Locales")
-
-    lr = st.selectbox(
-        "Learning Rate",
-        [0.1, 0.01, 0.001],
-        index=1,
-        key="lr_select",
-    )
-
-    batch = st.select_slider(
-        "Batch Size",
-        options=[8, 16, 32, 64],
-        value=32,
-        key="batch_select",
-    )
+    lr = st.selectbox("Learning Rate", [0.1, 0.01, 0.001], index=1)
+    batch = st.select_slider("Batch Size", options=[8, 16, 32, 64], value=32)
 
     st.divider()
-    start_button = st.button(
-        "🚀 Iniciar Entrenamiento Automático",
-        width="stretch",
-        disabled=(
-            not selected_metrics
-            or not distributor_selection_valid
-        ),
+    if entrenamiento_en_curso:
+        stop_button = st.button("🛑 Detener Entrenamiento", type="primary", width='stretch')
+        start_button = False
+    else:
+        # El entrenamiento solo se habilita si el SuperLink está activo
+        start_button = st.button(
+            "🚀 Iniciar ServerApp (Entrenamiento)", 
+            width='stretch', 
+            disabled=(not superlink_activo or not selected_metrics or not distributor_selection_valid)
+        )
+        stop_button = False
+
+# --- GESTIÓN DE EXECUTABLES DE FLOWER ---
+import sys
+import shutil
+
+def buscar_ejecutable(nombres_posibles):
+    python_dir = os.path.dirname(sys.executable)
+    for nombre in nombres_posibles:
+        # Buscamos directamente en la carpeta de tu entorno
+        ruta_directa = os.path.join(python_dir, f"{nombre}.exe")
+        if os.path.exists(ruta_directa):
+            return ruta_directa
+        # Fallback al buscador global de tu sistema
+        ruta_shutil = shutil.which(nombre)
+        if ruta_shutil:
+            return ruta_shutil
+    return None
+
+superlink_exe = buscar_ejecutable(["flower-superlink", "flwr-superlink"])
+flwr_exe = buscar_ejecutable(["flwr"])
+
+if not superlink_exe or not flwr_exe:
+    st.error(
+        f"❌ No se encontraron los ejecutables de Flower.\n\n"
+        f"**SuperLink detectado:** `{superlink_exe}`\n"
+        f"**flwr detectado:** `{flwr_exe}`"
     )
+    st.stop()
 
-
-st.subheader("📊 Métricas de la Última Ronda")
-
-kpi_placeholders = {}
-if selected_metrics:
-    columnas_kpi = st.columns(len(selected_metrics))
-    for columna, metrica in zip(columnas_kpi, selected_metrics):
-        kpi_placeholders[metrica] = columna.empty()
-else:
-    st.info("Marca al menos una métrica en el panel lateral.")
-
-st.divider()
-placeholder_tiempo = st.empty()
-
-grafica_placeholders = {
-    metrica: st.empty()
-    for metrica in selected_metrics
-}
-
-# Este contenedor se usa únicamente en task_logistica.
-panel_distribuidores = st.empty()
-
-
-def formatear_valor(metrica, valor):
-    configuracion = CONFIG_METRICAS[metrica]
-    texto = format(valor, configuracion["formato"])
-    return f"{texto}{configuracion.get('sufijo', '')}"
-
-
-def pintar_panel_distribuidores(data, key_suffix):
-    """Muestra los resultados individuales de la última ronda logística."""
-
-    if data.get("task") != "task_logistica":
-        return
-
-    historial = data.get("distribuidores", [])
-    if not historial:
-        return
-
-    ultima_ronda = historial[-1]
-    resultados = ultima_ronda.get("resultados", [])
-
-    if not resultados:
-        return
-
-    df = pd.DataFrame(resultados)
-
-    # Seguridad adicional: aunque el servidor ya guarda únicamente los
-    # distribuidores elegidos, filtramos por la selección de esta ejecución.
-    configured_distributors = {
-        int(distributor_id)
-        for distributor_id in data.get("selected_distributors", [])
-    }
-    if configured_distributors and "distribuidor" in df.columns:
-        df = df[
-            df["distribuidor"].isin(configured_distributors)
-        ].copy()
-
-    if df.empty:
-        return
-
-    columnas_numericas = [
-        "mae",
-        "rmse",
-        "r2",
-        "retraso_real_medio",
-        "retraso_predicho_medio",
-        "diferencia_media",
+# --- DETENCIÓN Y ARRANQUE DEL SUPERLINK ---
+if start_superlink:
+    st.session_state.superlink_process = subprocess.Popen(
+    [
+        superlink_exe,
+        "--insecure",
+        "--fleet-api-address", "0.0.0.0:9092",
+        "--control-api-address", "0.0.0.0:9093",
     ]
-    for columna in columnas_numericas:
-        if columna in df.columns:
-            df[columna] = pd.to_numeric(
-                df[columna],
-                errors="coerce",
-            )
+    )
+    st.toast("🌐 ¡SuperLink abierto! Clientes en 9092, ServerApp en 9091", icon="🌍")
+    st.rerun()
 
-    columnas_tabla = [
-        "distribuidor",
-        "mae",
-        "rmse",
-        "r2",
-        "retraso_real_medio",
-        "retraso_predicho_medio",
-        "diferencia_media",
-    ]
-    columnas_tabla = [
-        columna for columna in columnas_tabla
-        if columna in df.columns
-    ]
+if stop_superlink and st.session_state.superlink_process is not None:
+    st.session_state.superlink_process.terminate()
+    st.session_state.superlink_process = None
+    st.toast("🛑 SuperLink detenido de forma segura.", icon="🔌")
+    st.rerun()
 
-    nombres_columnas = {
-        "distribuidor": "Distribuidor",
-        "mae": "MAE (min)",
-        "rmse": "RMSE (min)",
-        "r2": "R²",
-        "retraso_real_medio": "Retraso real medio (min)",
-        "retraso_predicho_medio": "Retraso predicho medio (min)",
-        "diferencia_media": "Diferencia media (min)",
-    }
+# --- DETENER ENTRENAMIENTO (ServerApp) ---
+ruta_txt_parada = os.path.abspath("stop_training.txt")
+if stop_button and st.session_state.server_app_process is not None:
+    st.toast("🛑 Enviando señal de parada a la ServerApp...", icon="⏳")
+    with open(ruta_txt_parada, "w") as f:
+        f.write("stop")
+    st.rerun()
 
-    panel_distribuidores.empty()
+# --- ÁREA PRINCIPAL ---
+st.subheader("📊 Métricas del Entrenamiento")
 
-    with panel_distribuidores.container():
-        st.divider()
-        st.subheader("🚚 Resultados por distribuidor")
-        selected_text = ", ".join(
-            f"Distribuidor {int(distributor_id)}"
-            for distributor_id in sorted(df["distribuidor"].tolist())
-        )
-        st.caption(
-            f"Resultados individuales de la ronda "
-            f"{ultima_ronda.get('round', '-')}: {selected_text}"
-        )
+def dibujar_dashboard():
+    ruta_metrics = os.path.abspath("metrics.json")
+    if not os.path.exists(ruta_metrics):
+        st.info("No hay métricas registradas. ¡Inicia un entrenamiento cuando el SuperLink esté activo!")
+        return
 
-        tabla = df[columnas_tabla].rename(
-            columns=nombres_columnas
-        )
-        st.dataframe(
-            tabla,
-            width="stretch",
-            hide_index=True,
-        )
+    try:
+        with open(ruta_metrics, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except:
+        return
 
-        if (
-            "diferencia_media" in df.columns
-            and not df["diferencia_media"].dropna().empty
-        ):
-            indice_peor = df["diferencia_media"].idxmax()
-            peor = df.loc[indice_peor]
-
-            st.warning(
-                f"El distribuidor {int(peor['distribuidor'])} "
-                f"presenta la mayor diferencia media: "
-                f"{peor['diferencia_media']:.2f} minutos."
-            )
-
-        columna_1, columna_2 = st.columns(2)
-
-        with columna_1:
-            if (
-                "mae" in df.columns
-                and not df["mae"].dropna().empty
-            ):
-                figura_mae = px.bar(
-                    df.dropna(subset=["mae"]),
-                    x="distribuidor",
-                    y="mae",
-                    text_auto=".2f",
-                    title="MAE por distribuidor",
-                    labels={
-                        "distribuidor": "Distribuidor",
-                        "mae": "MAE (minutos)",
-                    },
-                )
-                figura_mae.update_layout(
-                    xaxis=dict(
-                        tickmode="linear",
-                        dtick=1,
-                    )
-                )
-                st.plotly_chart(
-                    figura_mae,
-                    width="stretch",
-                    key=f"mae_distribuidor_{key_suffix}",
-                )
-
-        with columna_2:
-            columnas_comparacion = {
-                "retraso_real_medio",
-                "retraso_predicho_medio",
-            }
-
-            if columnas_comparacion.issubset(df.columns):
-                comparacion = df[
-                    [
-                        "distribuidor",
-                        "retraso_real_medio",
-                        "retraso_predicho_medio",
-                    ]
-                ].melt(
-                    id_vars="distribuidor",
-                    value_vars=[
-                        "retraso_real_medio",
-                        "retraso_predicho_medio",
-                    ],
-                    var_name="tipo",
-                    value_name="retraso",
-                )
-
-                comparacion["tipo"] = comparacion["tipo"].map(
-                    {
-                        "retraso_real_medio": "Retraso real",
-                        "retraso_predicho_medio": "Retraso predicho",
-                    }
-                )
-
-                comparacion = comparacion.dropna(
-                    subset=["retraso"]
-                )
-
-                if not comparacion.empty:
-                    figura_comparacion = px.bar(
-                        comparacion,
-                        x="distribuidor",
-                        y="retraso",
-                        color="tipo",
-                        barmode="group",
-                        text_auto=".2f",
-                        title="Retraso real frente al predicho",
-                        labels={
-                            "distribuidor": "Distribuidor",
-                            "retraso": "Retraso medio (minutos)",
-                            "tipo": "Valor",
-                        },
-                    )
-                    figura_comparacion.update_layout(
-                        xaxis=dict(
-                            tickmode="linear",
-                            dtick=1,
-                        )
-                    )
-                    st.plotly_chart(
-                        figura_comparacion,
-                        width="stretch",
-                        key=f"retrasos_distribuidor_{key_suffix}",
-                    )
-
-
-def pintar_metricas(data, key_suffix):
     rondas = data.get("round", [])
     if not rondas:
-        return 0
+        return
 
-    columnas_permitidas = {"round", "time", *CONFIG_METRICAS.keys()}
-    columnas = {
-        clave: valor
-        for clave, valor in data.items()
-        if (
-            clave in columnas_permitidas
-            and isinstance(valor, list)
-            and len(valor) == len(rondas)
-        )
-    }
-    df = pd.DataFrame(columnas)
+    df = pd.DataFrame({k: v for k, v in data.items() if isinstance(v, list) and len(v) == len(rondas)})
 
-    if "time" in df.columns and not df["time"].dropna().empty:
-        tiempos = df["time"].dropna().tolist()
-        duraciones_ronda = [tiempos[0]] + [
-            tiempos[i] - tiempos[i - 1]
-            for i in range(1, len(tiempos))
-        ]
-        tiempo_medio = sum(duraciones_ronda) / len(duraciones_ronda)
-        placeholder_tiempo.metric(
-            label="⌛ Tiempo medio por ronda",
-            value=f"{tiempo_medio:.2f} segundos",
-        )
+    metricas_validas = [
+        m for m in selected_metrics
+        if m in df.columns and not df.dropna(subset=[m]).empty
+    ]
+
+    for i in range(0, len(metricas_validas), 2):
+        columnas_kpis = st.columns(2)
+
+        for col, metrica in zip(columnas_kpis, metricas_validas[i:i + 2]):
+            df_m = df.dropna(subset=[metrica])
+            val = df_m[metrica].iloc[-1]
+            prev = df_m[metrica].iloc[-2] if len(df_m) > 1 else val
+            delta = val - prev
+            config = CONFIG_METRICAS[metrica]
+
+            texto_val = format(val, config["formato"]) + config.get("sufijo", "")
+            texto_del = format(delta, config["formato"]) + config.get("sufijo", "")
+
+            col.metric(
+                label=config["kpi"],
+                value=texto_val,
+                delta=texto_del,
+                delta_color=config["delta_color"]
+            )
 
     for metrica in selected_metrics:
-        if metrica not in df.columns:
-            continue
+        if metrica in df.columns:
+            df_m = df.dropna(subset=[metrica])
+            if not df_m.empty:
+                config = CONFIG_METRICAS[metrica]
+                fig = px.line(df_m, x="round", y=metrica, markers=True, title=config["titulo"], template="plotly_white")
+                fig.update_traces(line=dict(width=3, color=config["color"]), marker=dict(size=8))
+                fig.update_layout(uirevision="constant")
+                st.plotly_chart(fig, width='stretch', key=f"chart_{metrica}")
 
-        df_metrica = df.dropna(subset=[metrica])
-        if df_metrica.empty:
-            continue
+    if data.get("task") == "task_logistica" and data.get("distribuidores"):
+        historial = data["distribuidores"]
+        if historial:
+            resultados = historial[-1].get("resultados", [])
+            if resultados:
+                st.divider()
+                st.subheader("🚚 Resultados por distribuidor")
+                df_dist = pd.DataFrame(resultados)
+                st.dataframe(df_dist, width='stretch', hide_index=True)
+    
 
-        configuracion = CONFIG_METRICAS[metrica]
-        ultimo_valor = float(df_metrica[metrica].iloc[-1])
-        delta = (
-            ultimo_valor - float(df_metrica[metrica].iloc[-2])
-            if len(df_metrica) > 1
-            else 0.0
-        )
+if entrenamiento_en_curso:
+    @st.fragment(run_every="1s")
+    def monitor_vivo():
+        dibujar_dashboard()
+        if st.session_state.server_app_process.poll() is not None:
+            st.rerun()
+    monitor_vivo()
+else:
+    dibujar_dashboard()
+    if st.session_state.server_app_process is not None:
+        if st.session_state.server_app_process.poll() == 0:
+            st.success("✨ Entrenamiento completado con éxito en la red.")
+        else:
+            st.warning("🛑 ServerApp detenido.")
+        st.session_state.server_app_process = None
 
-        kpi_placeholders[metrica].metric(
-            label=configuracion["kpi"],
-            value=formatear_valor(metrica, ultimo_valor),
-            delta=formatear_valor(metrica, delta),
-            delta_color=configuracion["delta_color"],
-        )
-
-        figura = px.line(
-            df_metrica,
-            x="round",
-            y=metrica,
-            markers=True,
-            title=configuracion["titulo"],
-            template="plotly_white",
-        )
-        figura.update_traces(
-            line=dict(width=3, color=configuracion["color"]),
-            marker=dict(size=8),
-        )
-        figura.update_layout(
-            xaxis_title="Ronda",
-            yaxis_title=configuracion["nombre"],
-        )
-
-        grafica_placeholders[metrica].plotly_chart(
-            figura,
-            width="stretch",
-            key=f"{metrica}_{key_suffix}",
-        )
-
-    pintar_panel_distribuidores(data, key_suffix)
-
-    return len(rondas)
-
-
+# --- LANZAMIENTO DEL PROCESO SERVERAPP ---
 if start_button:
-    if not selected_metrics:
-        st.error("Debes seleccionar al menos una métrica.")
-        st.stop()
+    ruta_config = os.path.abspath("run_config.json")
+    ruta_metrics = os.path.abspath("metrics.json")
 
-    if tarea == "task_logistica" and not distributor_selection_valid:
-        st.error("Debes seleccionar entre 2 y 4 distribuidores.")
-        st.stop()
+    if os.path.exists(ruta_metrics):
+        os.remove(ruta_metrics)
+    if os.path.exists(ruta_txt_parada):
+        os.remove(ruta_txt_parada)
 
-    if (
-        st.session_state.server_process is None
-        or st.session_state.server_process.poll() is not None
-    ):
-        ruta_absoluta_config = os.path.abspath("run_config.json")
-        ruta_absoluta_metrics = os.path.abspath("metrics.json")
+    if not usar_checkpoints:
+        checkpoints_viejos = glob.glob(os.path.join("checkpoint", "checkpoint_round_*.npz"))
+        for f_old in checkpoints_viejos:
+            try: os.remove(f_old)
+            except: pass
 
-        if os.path.exists(ruta_absoluta_metrics):
-            os.remove(ruta_absoluta_metrics)
+    config_data = {
+        "rounds": num_rounds, "min_clients": int(min_clients), "lr": lr, "batch_size": batch,
+        "fraction": fraction_val, "strategy": estrategia, "mu": mu_val, "task": tarea,
+        "selected_metrics": selected_metrics, "data_distribution": data_distribution,
+        "privacy_epsilon": privacy_epsilon, "dp_noise": dp_noise, "selected_distributors": selected_distributors,
+        "use_checkpoints": usar_checkpoints
+    }
 
-        config_data = {
-            "rounds": num_rounds,
-            "min_clients": int(min_clients),
-            "lr": lr,
-            "batch_size": batch,
-            "fraction": fraction_val,
-            "strategy": estrategia,
-            "mu": mu_val,
-            "task": tarea,
-            "selected_metrics": selected_metrics,
-            "data_distribution": data_distribution,
-            "privacy_budget": privacy_budget,
-            "privacy_epsilon": privacy_epsilon,
-            "dp_noise": dp_noise,
-            # En las tareas MNIST queda vacío. En logística contiene los
-            # identificadores reales de los distribuidores seleccionados.
-            "selected_distributors": selected_distributors,
-        }
+    with open(ruta_config, "w", encoding="utf-8") as f:
+        json.dump(config_data, f, ensure_ascii=False, indent=2)
 
-        with open(ruta_absoluta_config, "w", encoding="utf-8") as f:
-            json.dump(config_data, f, ensure_ascii=False, indent=2)
+    entorno = os.environ.copy()
+    entorno["FLWR_RUN_CONFIG_PATH"] = ruta_config
+    entorno["FLWR_METRICS_PATH"] = ruta_metrics
+    entorno["FLWR_TASK_NAME"] = tarea
+    entorno["PYTHONPATH"] = os.getcwd() + os.pathsep + entorno.get("PYTHONPATH", "")
 
-        entorno = os.environ.copy()
-        entorno["FLWR_RUN_CONFIG_PATH"] = ruta_absoluta_config
-        entorno["FLWR_METRICS_PATH"] = ruta_absoluta_metrics
-        entorno["FLWR_TASK_NAME"] = tarea
-        entorno["PYTHONPATH"] = os.getcwd() + os.pathsep + entorno.get("PYTHONPATH", "")
 
-        flwr_exe = r"C:\Flower\.venv\Scripts\flwr.exe"
-
-        if not os.path.exists(flwr_exe):
-            st.error(f"No se encuentra Flower en esta ruta: {flwr_exe}")
-            st.stop()
-
-        comando_servidor = [flwr_exe, "run", ".", "--stream"]
-
-        st.session_state.server_process = subprocess.Popen(
-            comando_servidor,
-            env=entorno,
-        )
-
-        nombres_metricas = ", ".join(
-            CONFIG_METRICAS[metrica]["nombre"]
-            for metrica in selected_metrics
-        )
-        st.toast(
-            f"🚀 Iniciando {tarea}: {nombres_metricas}",
-            icon="🌸",
-        )
-
-        ultimo_round_dibujado = 0
-
-        while st.session_state.server_process.poll() is None:
-            try:
-                with open(ruta_absoluta_metrics, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-
-                if len(data.get("round", [])) > ultimo_round_dibujado:
-                    ultimo_round_dibujado = pintar_metricas(
-                        data,
-                        key_suffix=f"live_{len(data['round'])}",
-                    )
-            except (FileNotFoundError, json.JSONDecodeError, KeyError, IndexError):
-                pass
-
-            time.sleep(1)
-
-        try:
-            with open(ruta_absoluta_metrics, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            pintar_metricas(data, key_suffix="final")
-        except Exception as error:
-            st.warning(f"No se pudieron cargar las métricas finales: {error}")
-
-        st.session_state.server_process = None
-        st.success("✨ Entrenamiento finalizado.")
+    st.session_state.server_app_process = subprocess.Popen(
+    [
+        flwr_exe,
+        "run",
+        ".",
+        "red-fisica",
+        "--stream",
+    ],
+    env=entorno,
+    cwd=os.getcwd()
+)
+    st.toast("🚀 Iniciar flwr run", icon="🌸")
+    st.rerun()

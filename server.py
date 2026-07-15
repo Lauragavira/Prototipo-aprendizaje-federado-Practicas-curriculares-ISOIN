@@ -1,9 +1,9 @@
 import json
 import os
 import time
-
+import glob
+import numpy as np
 import flwr as fl
-
 
 config_path = os.environ.get("FLWR_RUN_CONFIG_PATH", "run_config.json")
 metrics_path = os.environ.get("FLWR_METRICS_PATH", "metrics.json")
@@ -25,166 +25,63 @@ except FileNotFoundError:
         "data_distribution": "IID",
         "privacy_epsilon": None,
         "dp_noise": 0.0,
+        "use_checkpoints": False
     }
 
-
 ALL_METRICS = ["loss", "accuracy", "mae", "rmse", "r2"]
-
-TASK_DEFAULT_METRICS = {
-    "task_mnist": ["loss", "accuracy"],
-    "task_noIID_mnist": ["loss", "accuracy"],
-    "task_logistica": ["mae", "rmse", "r2"],
-}
-
-DISTRIBUTOR_METRICS = [
-    "mae",
-    "rmse",
-    "r2",
-    "retraso_real_medio",
-    "retraso_predicho_medio",
-    "diferencia_media",
-]
-
 TASK_NAME = args.get("task", os.environ.get("FLWR_TASK_NAME", "task_mnist"))
-
+DISTRIBUTOR_METRICS = ["mae", "rmse", "r2", "retraso_real_medio", "retraso_predicho_medio", "diferencia_media"]
 
 def parse_selected_distributors():
-    """Valida los distribuidores elegidos desde Streamlit."""
-
     if TASK_NAME != "task_logistica":
         return []
-
     raw_distributors = args.get("selected_distributors", [])
-
     try:
-        distributors = [
-            int(distributor_id)
-            for distributor_id in raw_distributors
-        ]
-    except (TypeError, ValueError) as error:
-        raise ValueError(
-            "selected_distributors debe ser una lista de números enteros."
-        ) from error
-
-    if not 2 <= len(distributors) <= 4:
-        raise ValueError(
-            "En logística se deben seleccionar entre 2 y 4 "
-            f"distribuidores. Se recibieron {len(distributors)}."
-        )
-
-    if len(set(distributors)) != len(distributors):
-        raise ValueError("No se pueden repetir distribuidores.")
-
-    invalid = [
-        distributor_id
-        for distributor_id in distributors
-        if distributor_id not in {1, 2, 3, 4}
-    ]
-    if invalid:
-        raise ValueError(
-            f"Distribuidores no válidos: {invalid}. "
-            "Solo existen los distribuidores 1, 2, 3 y 4."
-        )
-
-    return distributors
-
+        return [int(d_id) for d_id in raw_distributors]
+    except (TypeError, ValueError):
+        return []
 
 SELECTED_DISTRIBUTORS = parse_selected_distributors()
+NUM_CLIENTS = len(SELECTED_DISTRIBUTORS) if TASK_NAME == "task_logistica" else int(args.get("min_clients", 2))
 
-if TASK_NAME == "task_logistica":
-    # Cada distribuidor seleccionado representa un cliente Flower.
-    NUM_CLIENTS = len(SELECTED_DISTRIBUTORS)
-else:
-    NUM_CLIENTS = int(args.get("min_clients", 2))
-    if NUM_CLIENTS < 2 or NUM_CLIENTS > 4:
-        raise ValueError(
-            "El número de clientes debe estar entre 2 y 4. "
-            f"Se recibió: {NUM_CLIENTS}."
-        )
-
-selected_metrics = args.get(
-    "selected_metrics",
-    TASK_DEFAULT_METRICS.get(TASK_NAME, ["loss", "accuracy"]),
-)
-selected_metrics = [
-    metric for metric in selected_metrics if metric in ALL_METRICS
-]
-
-if not selected_metrics:
-    selected_metrics = TASK_DEFAULT_METRICS.get(
-        TASK_NAME,
-        ["loss", "accuracy"],
-    )
-
-
-
+selected_metrics = [m for m in args.get("selected_metrics", ["loss", "accuracy"]) if m in ALL_METRICS]
 
 def weighted_average(metrics):
-    """Agrega únicamente las métricas seleccionadas en Streamlit."""
-
     aggregated = {}
-
     for metric_name in selected_metrics:
         if metric_name == "loss":
             continue
-
-        valid_values = [
-            (num_examples, client_metrics[metric_name])
-            for num_examples, client_metrics in metrics
-            if metric_name in client_metrics
-        ]
-
+        valid_values = [(num_examples, client_metrics[metric_name]) 
+                        for num_examples, client_metrics in metrics if metric_name in client_metrics]
         if not valid_values:
             continue
-
-        total_examples = sum(
-            num_examples for num_examples, _ in valid_values
-        )
+        total_examples = sum(num_examples for num_examples, _ in valid_values)
         if total_examples == 0:
             continue
-
-        aggregated[metric_name] = sum(
-            num_examples * float(value)
-            for num_examples, value in valid_values
-        ) / total_examples
-
+        aggregated[metric_name] = sum(num_examples * float(val) for num_examples, val in valid_values) / total_examples
     return aggregated
-
 
 def common_config():
     return {
         "num_clients": NUM_CLIENTS,
         "data_distribution": args.get("data_distribution", "IID"),
         "task_name": TASK_NAME,
-        # Flower solo permite valores escalares en config.
         "selected_metrics": ",".join(selected_metrics),
-        "selected_distributors": ",".join(
-            str(distributor_id)
-            for distributor_id in SELECTED_DISTRIBUTORS
-        ),
+        "selected_distributors": ",".join(str(d_id) for d_id in SELECTED_DISTRIBUTORS),
     }
-
 
 def fit_config(server_round: int):
     config = common_config()
-    config.update(
-        {
-            "lr": float(args["lr"]),
-            "batch_size": int(args["batch_size"]),
-            "privacy_epsilon": (
-                float(args["privacy_epsilon"])
-                if args.get("privacy_epsilon") is not None
-                else -1.0
-            ),
-            "dp_noise": float(args.get("dp_noise", 0.0)),
-        }
-    )
+    config.update({
+        "lr": float(args["lr"]),
+        "batch_size": int(args["batch_size"]),
+        "privacy_epsilon": float(args["privacy_epsilon"]) if args.get("privacy_epsilon") is not None else -1.0,
+        "dp_noise": float(args.get("dp_noise", 0.0)),
+    })
     return config
-
 
 def evaluate_config(server_round: int):
     return common_config()
-
 
 def empty_metrics_data():
     data = {
@@ -193,131 +90,93 @@ def empty_metrics_data():
         "selected_distributors": SELECTED_DISTRIBUTORS,
         "round": [],
         "time": [],
-        # Una entrada por ronda con los resultados individuales.
         "distribuidores": [],
     }
-
     for metric in ALL_METRICS:
         data[metric] = []
-
     return data
 
-
 def safe_float(value):
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return None
-
+    try: return float(value)
+    except (TypeError, ValueError): return None
 
 def extract_distributor_results(server_round, results):
-    """Extrae las métricas individuales de cada distribuidor."""
-
     if TASK_NAME != "task_logistica":
         return None
-
     distributor_results = []
-
-    for position, (_, evaluate_res) in enumerate(results, start=1):
-        client_metrics = evaluate_res.metrics or {}
-
-        distributor_id = safe_float(
-            client_metrics.get("distribuidor_id", position)
-        )
-
-        actual_distributor_id = int(distributor_id or position)
-
-        # Solo se guardan distribuidores seleccionados en esta ejecución.
-        if (
-            SELECTED_DISTRIBUTORS
-            and actual_distributor_id not in SELECTED_DISTRIBUTORS
-        ):
+    for pos, (_, eval_res) in enumerate(results, start=1):
+        client_metrics = eval_res.metrics or {}
+        d_id = int(safe_float(client_metrics.get("distribuidor_id", pos)) or pos)
+        if SELECTED_DISTRIBUTORS and d_id not in SELECTED_DISTRIBUTORS:
             continue
-
-        row = {
-            "distribuidor": actual_distributor_id,
-            "num_examples": int(evaluate_res.num_examples),
-        }
-
+        row = {"distribuidor": d_id, "num_examples": int(eval_res.num_examples)}
         for metric_name in DISTRIBUTOR_METRICS:
-            row[metric_name] = safe_float(
-                client_metrics.get(metric_name)
-            )
-
+            row[metric_name] = safe_float(client_metrics.get(metric_name))
         distributor_results.append(row)
+    distributor_results.sort(key=lambda item: item["distribuidor"])
+    return {"round": int(server_round), "resultados": distributor_results}
 
-    distributor_results.sort(
-        key=lambda item: item["distribuidor"]
-    )
-
-    return {
-        "round": int(server_round),
-        "resultados": distributor_results,
-    }
-
+def cargar_parametros_iniciales(ruta_archivo: str):
+    if os.path.exists(ruta_archivo):
+        print(f"📦 Checkpoint detectado: Cargando {ruta_archivo}...")
+        datos_cargados = np.load(ruta_archivo)
+        lista_ndarrays = [datos_cargados[clave] for clave in datos_cargados.files]
+        return fl.common.ndarrays_to_parameters(lista_ndarrays)
+    return None
 
 def server_fn(context: fl.common.Context):
-    """Flower llama a esta función al iniciar el entrenamiento."""
+    # --- Gestión de Checkpoints (Tu lógica) ---
+    pesos_recuperados = None
+    carpeta_checkpoints = os.path.join("checkpoint", TASK_NAME)
+    activar_reanudacion = args.get("use_checkpoints", True)
+    ronda_inicial = 0
+
+    if activar_reanudacion:
+        checkpoints = glob.glob(os.path.join(carpeta_checkpoints, "checkpoint_round_*.npz"))
+        if checkpoints:
+            def extraer_numero_ronda(path):
+                try: return int(os.path.basename(path).split('_')[-1].split('.')[0])
+                except: return -1
+            ultimo_checkpoint = max(checkpoints, key=extraer_numero_ronda)
+            pesos_recuperados = cargar_parametros_iniciales(ultimo_checkpoint)
+            ronda_inicial = max(0, extraer_numero_ronda(ultimo_checkpoint))
 
     base_kwargs = {
         "fraction_fit": float(args["fraction"]),
         "fraction_evaluate": float(args["fraction"]),
         "min_available_clients": NUM_CLIENTS,
-        "min_fit_clients": max(
-            1,
-            int(NUM_CLIENTS * args["fraction"]),
-        ),
-        "min_evaluate_clients": max(
-            1,
-            int(NUM_CLIENTS * args["fraction"]),
-        ),
+        "min_fit_clients": max(1, int(NUM_CLIENTS * args["fraction"])),
+        "min_evaluate_clients": max(1, int(NUM_CLIENTS * args["fraction"])),
         "on_fit_config_fn": fit_config,
         "on_evaluate_config_fn": evaluate_config,
         "fit_metrics_aggregation_fn": weighted_average,
         "evaluate_metrics_aggregation_fn": weighted_average,
+        "initial_parameters": pesos_recuperados
     }
 
+    BaseStrategy = fl.server.strategy.FedProx if args["strategy"] == "FedProx" else (
+        fl.server.strategy.FedMedian if args["strategy"] == "FedMedian" else fl.server.strategy.FedAvg
+    )
     if args["strategy"] == "FedProx":
-        base_strategy = fl.server.strategy.FedProx
         base_kwargs["proximal_mu"] = float(args["mu"])
-    elif args["strategy"] == "FedMedian":
-        base_strategy = fl.server.strategy.FedMedian
-    else:
-        base_strategy = fl.server.strategy.FedAvg
 
-    class SaveMetricsStrategy(base_strategy):
-        def __init__(self, **kwargs):
+    class SaveMetricsStrategy(BaseStrategy):
+        def __init__(self, ronda_inicial=0, **kwargs):
             super().__init__(**kwargs)
             self.start_time = time.time()
+            self.ronda_inicial = ronda_inicial
 
-        def aggregate_evaluate(
-            self,
-            server_round,
-            results,
-            failures,
-        ):
-            loss, metrics = super().aggregate_evaluate(
-                server_round,
-                results,
-                failures,
-            )
-
+        def aggregate_evaluate(self, server_round, results, failures):
+            loss, metrics = super().aggregate_evaluate(server_round, results, failures)
             if loss is None:
                 return loss, metrics
-
+            
             elapsed_time = time.time() - self.start_time
             metrics = metrics or {}
+            ronda_real = self.ronda_inicial + server_round
 
-            # Respaldo para versiones de Flower que devuelven vacío
-            # el diccionario agregado.
             if results:
-                client_metrics = [
-                    (
-                        evaluate_res.num_examples,
-                        evaluate_res.metrics or {},
-                    )
-                    for _, evaluate_res in results
-                ]
+                client_metrics = [(ev_res.num_examples, ev_res.metrics or {}) for _, ev_res in results]
                 metrics.update(weighted_average(client_metrics))
 
             try:
@@ -326,52 +185,45 @@ def server_fn(context: fl.common.Context):
             except (FileNotFoundError, json.JSONDecodeError):
                 data = empty_metrics_data()
 
-            data["round"].append(int(server_round))
-            data["time"].append(float(elapsed_time))
+            # Asegurar consistencia de listas
+            if int(ronda_real) not in data["round"]:
+                data["round"].append(int(ronda_real))
+                data["time"].append(float(elapsed_time))
+                for m in ALL_METRICS:
+                    val = float(loss) if m == "loss" else safe_float(metrics.get(m)) if m in selected_metrics else None
+                    data[m].append(val)
 
-            for metric in ALL_METRICS:
-                value = None
-
-                if metric in selected_metrics:
-                    if metric == "loss":
-                        value = float(loss)
-                    elif metric in metrics:
-                        value = safe_float(metrics[metric])
-
-                data[metric].append(value)
-
-            distributor_round = extract_distributor_results(
-                server_round,
-                results,
-            )
-            if distributor_round is not None:
-                data.setdefault("distribuidores", [])
-                data["distribuidores"].append(distributor_round)
+                dist_round = extract_distributor_results(ronda_real, results)
+                if dist_round:
+                    data.setdefault("distribuidores", [])
+                    data["distribuidores"].append(dist_round)
 
             with open(metrics_path, "w", encoding="utf-8") as f:
-                json.dump(
-                    data,
-                    f,
-                    ensure_ascii=False,
-                    indent=2,
-                )
-
+                json.dump(data, f, ensure_ascii=False, indent=2)
             return loss, metrics
 
-    with open(metrics_path, "w", encoding="utf-8") as f:
-        json.dump(
-            empty_metrics_data(),
-            f,
-            ensure_ascii=False,
-            indent=2,
-        )
+        def aggregate_fit(self, server_round, results, failures):
+            if os.path.exists("stop_training.txt"):
+                print("🛑 Abortando entrenamiento de forma segura...")
+                raise InterruptedError("Entrenamiento detenido desde la web.")
+            
+            agg_weights, metrics = super().aggregate_fit(server_round, results, failures)
+            if agg_weights is not None:
+                os.makedirs(carpeta_checkpoints, exist_ok=True)
+                ndarrays = fl.common.parameters_to_ndarrays(agg_weights)
+                checkpoint_path = os.path.join(carpeta_checkpoints, f"checkpoint_round_{self.ronda_inicial + server_round}.npz")
+                np.savez(checkpoint_path, *ndarrays)
+            return agg_weights, metrics
+
+    if ronda_inicial == 0:
+        with open(metrics_path, "w", encoding="utf-8") as f:
+            json.dump(empty_metrics_data(), f, ensure_ascii=False, indent=2)
+
+    rondas_restantes = max(1, int(args["rounds"]) - ronda_inicial)
 
     return fl.server.ServerAppComponents(
-        config=fl.server.ServerConfig(
-            num_rounds=int(args["rounds"])
-        ),
-        strategy=SaveMetricsStrategy(**base_kwargs),
+        config=fl.server.ServerConfig(num_rounds=rondas_restantes),
+        strategy=SaveMetricsStrategy(ronda_inicial=ronda_inicial, **base_kwargs),
     )
-
 
 app = fl.server.ServerApp(server_fn=server_fn)

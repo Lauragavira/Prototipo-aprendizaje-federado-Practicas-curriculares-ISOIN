@@ -1,15 +1,16 @@
 import importlib
 import json
 import os
+import sys
 from collections import OrderedDict
-
 import flwr as fl
 import numpy as np
 import torch
+from flwr.app import Context
 
 
-DEFAULT_TASK = "task_mnist"
-
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+DEFAULT_TASK = "task_regresion_logistica"
 
 def get_requested_task_name(config=None):
     """Obtiene la tarea desde la configuración enviada por el servidor.
@@ -93,7 +94,22 @@ class GenericFlowerClient(fl.client.NumPyClient):
 
         if self.task_name != requested_task or self.task is None or self.net is None:
             self.task_name = requested_task
-            self.task = importlib.import_module(requested_task)
+            
+            try:
+                # Intento 1: Buscar dentro de la carpeta 'task'
+                self.task = importlib.import_module(f"task.{requested_task}")
+            except Exception as error_carpeta:
+                try:
+                    # Intento 2: Fallback por si el archivo está en la raíz
+                    self.task = importlib.import_module(requested_task)
+                except Exception as error_raiz:
+                    # Si falla, lanzamos un error claro a la consola para saber exactamente el porqué
+                    raise RuntimeError(
+                        f"\n❌ CRÍTICO: No se pudo cargar el archivo '{requested_task}.py'.\n"
+                        f"Detalle al buscar en carpeta 'task/': {error_carpeta}\n"
+                        f"Detalle al buscar en la raíz: {error_raiz}\n"
+                    )
+            
             self.net = self.task.get_model()
 
     def get_distributor_id(self, config):
@@ -123,7 +139,7 @@ class GenericFlowerClient(fl.client.NumPyClient):
             "num_clients": num_clients,
         }
 
-        if self.task_name == "task_logistica":
+        if self.task_name in ["task_logistica", "task_regresion_logistica"]:
             load_kwargs["distributor_id"] = self.get_distributor_id(
                 config
             )
@@ -131,7 +147,12 @@ class GenericFlowerClient(fl.client.NumPyClient):
         return self.task.load_data(**load_kwargs)
 
     def get_parameters(self, config):
+        if not config:
+            config = {"task_name": os.environ.get("FLWR_TASK_NAME", DEFAULT_TASK)}
+
         self.ensure_task(config)
+
+        print(f"Cliente {self.cid} usando task en get_parameters: {self.task_name}")
 
         if hasattr(self.task, "get_model_params"):
             return self.task.get_model_params(self.net)
@@ -212,7 +233,7 @@ class GenericFlowerClient(fl.client.NumPyClient):
 
         # Estas métricas auxiliares se envían siempre en logística.
         # El servidor las guarda por distribuidor y no las agrega globalmente.
-        if self.task_name == "task_logistica":
+        if self.task_name in ["task_logistica", "task_regresion_logistica"]:
             actual_distributor_id = self.get_distributor_id(config)
             metrics_to_send["distribuidor_id"] = float(
                 actual_distributor_id
@@ -237,8 +258,10 @@ class GenericFlowerClient(fl.client.NumPyClient):
         return float(loss), int(num_examples), metrics_to_send
 
 
-def client_fn(cid: str):
-    return GenericFlowerClient(cid).to_client()
+def client_fn(context: Context):
+    cid = context.node_config.get("partition-id", 0)
+    
+    return GenericFlowerClient(str(cid)).to_client()
 
 
 app = fl.client.ClientApp(client_fn=client_fn)

@@ -11,8 +11,11 @@ dependencies = [
     "torchvision"
 ]
 
+[tool.flwr.superlink.fleet-api]
+address = "0.0.0.0:9092"
+
 [tool.flwr.app]
-publisher = "juan_vazquez"
+publisher = "juan_vazquez, laura_gavira"
 
 [tool.flwr.app.components]
 serverapp = "server:app"
