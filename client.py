@@ -243,13 +243,14 @@ class GenericFlowerClient(fl.client.NumPyClient):
                 "retraso_real_medio",
                 "retraso_predicho_medio",
                 "diferencia_media",
+                "sesgo_medio",
             ]:
                 if auxiliary_metric in available_metrics:
                     metrics_to_send[auxiliary_metric] = available_metrics[
                         auxiliary_metric
                     ]
 
-            for distributor_metric in ["mae", "rmse", "r2"]:
+            for distributor_metric in ["mae", "mse", "rmse", "r2"]:
                 if distributor_metric in available_metrics:
                     metrics_to_send[distributor_metric] = available_metrics[
                         distributor_metric

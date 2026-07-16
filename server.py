@@ -28,12 +28,12 @@ except FileNotFoundError:
         "use_checkpoints": False
     }
 
-ALL_METRICS = ["loss", "accuracy", "mae", "rmse", "r2"]
+ALL_METRICS = ["loss", "accuracy", "mae", "mse", "rmse", "r2"]
 TASK_NAME = args.get("task", os.environ.get("FLWR_TASK_NAME", "task_mnist"))
-DISTRIBUTOR_METRICS = ["mae", "rmse", "r2", "retraso_real_medio", "retraso_predicho_medio", "diferencia_media"]
+DISTRIBUTOR_METRICS = ["mae", "mse", "rmse", "r2", "retraso_real_medio", "retraso_predicho_medio", "diferencia_media", "sesgo_medio"]
 
 def parse_selected_distributors():
-    if TASK_NAME != "task_logistica":
+    if TASK_NAME not in ["task_logistica", "task_regresion_logistica"]:
         return []
     raw_distributors = args.get("selected_distributors", [])
     try:
@@ -42,7 +42,11 @@ def parse_selected_distributors():
         return []
 
 SELECTED_DISTRIBUTORS = parse_selected_distributors()
-NUM_CLIENTS = len(SELECTED_DISTRIBUTORS) if TASK_NAME == "task_logistica" else int(args.get("min_clients", 2))
+NUM_CLIENTS = (
+    len(SELECTED_DISTRIBUTORS)
+    if TASK_NAME in ["task_logistica", "task_regresion_logistica"] and SELECTED_DISTRIBUTORS
+    else int(args.get("min_clients", 2))
+)
 
 selected_metrics = [m for m in args.get("selected_metrics", ["loss", "accuracy"]) if m in ALL_METRICS]
 
@@ -101,7 +105,7 @@ def safe_float(value):
     except (TypeError, ValueError): return None
 
 def extract_distributor_results(server_round, results):
-    if TASK_NAME != "task_logistica":
+    if TASK_NAME not in ["task_logistica", "task_regresion_logistica"]:
         return None
     distributor_results = []
     for pos, (_, eval_res) in enumerate(results, start=1):

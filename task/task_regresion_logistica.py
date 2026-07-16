@@ -2,20 +2,14 @@
 
 import glob
 import os
+
 import numpy as np
-from sklearn.metrics import (
-    accuracy_score,
-    mean_absolute_error,
-    mean_squared_error,
-    r2_score,
-)
 import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
-
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 from torch.utils.data import DataLoader, TensorDataset
 
 
@@ -28,85 +22,104 @@ COLUMNAS_ENTRADA = [
     "hora_llegada_estimada_min",
 ]
 
+COLUMNA_OBJETIVO = "retraso_min"
 INPUT_DIM = len(COLUMNAS_ENTRADA)
 
+# Escalado fijo y compartido por todos los clientes. En aprendizaje federado
+# no conviene ajustar un StandardScaler diferente en cada distribuidor, porque
+# los mismos pesos globales representarían escalas distintas.
+CENTROS_ENTRADA = np.array([720.0, 15.0, 10.0, 175.0, 75.0, 720.0], dtype=np.float32)
+ESCALAS_ENTRADA = np.array([360.0, 10.0, 5.0, 100.0, 30.0, 360.0], dtype=np.float32)
 
-class LogisticRegressionModel(nn.Module):
+# El archivo está dentro de task/, por lo que la raíz del proyecto es su carpeta padre.
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+
+class LinearRegressionModel(nn.Module):
+    """Regresión lineal para predecir minutos de retraso."""
+
     def __init__(self):
         super().__init__()
-        self.linear = nn.Linear(INPUT_DIM, 2)
+        self.linear = nn.Linear(INPUT_DIM, 1)
 
     def forward(self, x):
-        return self.linear(x)
+        return self.linear(x).squeeze(1)
 
 
 def get_model():
-    return LogisticRegressionModel()
+    return LinearRegressionModel()
 
 
 def preparar_datos(df):
+    """Convierte entradas y objetivo a valores numéricos y elimina filas inválidas."""
+
     df = df.copy()
 
-    df["puntual"] = (
-        df["puntual"]
-        .astype(str)
-        .str.lower()
-        .str.strip()
-        .map({
-            "si": 1,
-            "sí": 1,
-            "no": 0,
-        })
-    )
+    columnas_necesarias = COLUMNAS_ENTRADA + [COLUMNA_OBJETIVO]
+    columnas_faltantes = [col for col in columnas_necesarias if col not in df.columns]
+    if columnas_faltantes:
+        raise ValueError(
+            "Faltan columnas necesarias en el CSV: "
+            + ", ".join(columnas_faltantes)
+        )
 
-    df = df.dropna(subset=COLUMNAS_ENTRADA + ["puntual"])
+    for columna in columnas_necesarias:
+        df[columna] = pd.to_numeric(df[columna], errors="coerce")
 
-    X = df[COLUMNAS_ENTRADA].astype(float)
-    y = df["puntual"].astype(int)
+    df = df.dropna(subset=columnas_necesarias)
+
+    X = df[COLUMNAS_ENTRADA].astype(np.float32)
+    y = df[COLUMNA_OBJETIVO].astype(np.float32)
 
     return X, y
 
 
 def obtener_ruta_csv(cid=0, distributor_id=None):
-    """
-    Busca el CSV del cliente.
+    """Busca el CSV asociado al distribuidor.
 
-    Prioridad:
-    1. Si hay distributor_id: data/distribuidor_N.csv
-    2. Si no: data/distribuidor_{cid + 1}.csv
-    3. Si no existe: primer data/distribuidor_*.csv
+    Se admiten las carpetas ``data/`` y ``distribuidores/`` para mantener
+    compatibilidad con ambas estructuras del proyecto.
     """
 
-    if distributor_id is not None:
-        ruta = os.path.join("data", f"distribuidor_{int(distributor_id)}.csv")
+    distribuidor = int(distributor_id) if distributor_id is not None else int(cid) + 1
+    nombre_archivo = f"distribuidor_{distribuidor}.csv"
+
+    carpetas_candidatas = [
+        os.path.join(PROJECT_ROOT, "data"),
+        os.path.join(PROJECT_ROOT, "distribuidores"),
+        os.path.abspath("data"),
+        os.path.abspath("distribuidores"),
+    ]
+
+    for carpeta in carpetas_candidatas:
+        ruta = os.path.join(carpeta, nombre_archivo)
         if os.path.exists(ruta):
             return ruta
 
-    ruta_cliente = os.path.join("data", f"distribuidor_{int(cid) + 1}.csv")
-    if os.path.exists(ruta_cliente):
-        return ruta_cliente
+    # Fallback: primer CSV disponible, evitando que una diferencia de carpetas
+    # impida arrancar el cliente.
+    for carpeta in carpetas_candidatas:
+        archivos_csv = sorted(glob.glob(os.path.join(carpeta, "distribuidor_*.csv")))
+        if archivos_csv:
+            return archivos_csv[0]
 
-    archivos_csv = sorted(glob.glob(os.path.join("data", "distribuidor_*.csv")))
-
-    if not archivos_csv:
-        raise FileNotFoundError(
-            "No se encontró ningún archivo con formato data/distribuidor_*.csv"
-        )
-
-    return archivos_csv[0]
+    raise FileNotFoundError(
+        "No se encontró ningún archivo distribuidor_*.csv en las carpetas "
+        "data/ o distribuidores/."
+    )
 
 
 def load_data(batch_size, cid=0, num_clients=2, distributor_id=None):
-    ruta_csv = obtener_ruta_csv(cid=cid, distributor_id=distributor_id)
+    del num_clients  # Se mantiene en la firma por compatibilidad con client.py.
 
+    ruta_csv = obtener_ruta_csv(cid=cid, distributor_id=distributor_id)
     print(f"Cliente {cid} usando CSV: {ruta_csv}")
 
     df = pd.read_csv(ruta_csv)
 
     if distributor_id is not None and "distribuidor_id" in df.columns:
         distribuidor = f"D{int(distributor_id)}"
-        df_filtrado = df[df["distribuidor_id"] == distribuidor]
-
+        df_filtrado = df[df["distribuidor_id"].astype(str) == distribuidor]
         if not df_filtrado.empty:
             df = df_filtrado
 
@@ -119,35 +132,34 @@ def load_data(batch_size, cid=0, num_clients=2, distributor_id=None):
 
     if len(X) < 5:
         raise ValueError(
-            f"No quedan suficientes filas válidas después de preparar los datos en {ruta_csv}."
+            "No quedan suficientes filas válidas después de preparar los "
+            f"datos en {ruta_csv}."
         )
 
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-
-    stratify = y if y.nunique() > 1 and y.value_counts().min() >= 2 else None
-
     X_train, X_test, y_train, y_test = train_test_split(
-        X_scaled,
+        X,
         y,
         test_size=0.2,
         random_state=42,
-        stratify=stratify,
     )
 
+    # Todos los distribuidores aplican exactamente la misma transformación.
+    X_train_scaled = (X_train.to_numpy(dtype=np.float32) - CENTROS_ENTRADA) / ESCALAS_ENTRADA
+    X_test_scaled = (X_test.to_numpy(dtype=np.float32) - CENTROS_ENTRADA) / ESCALAS_ENTRADA
+
     train_dataset = TensorDataset(
-        torch.tensor(X_train, dtype=torch.float32),
-        torch.tensor(y_train.to_numpy(), dtype=torch.long),
+        torch.tensor(X_train_scaled, dtype=torch.float32),
+        torch.tensor(y_train.to_numpy(), dtype=torch.float32),
     )
 
     test_dataset = TensorDataset(
-        torch.tensor(X_test, dtype=torch.float32),
-        torch.tensor(y_test.to_numpy(), dtype=torch.long),
+        torch.tensor(X_test_scaled, dtype=torch.float32),
+        torch.tensor(y_test.to_numpy(), dtype=torch.float32),
     )
 
     trainloader = DataLoader(
         train_dataset,
-        batch_size=batch_size,
+        batch_size=int(batch_size),
         shuffle=True,
     )
 
@@ -161,78 +173,80 @@ def load_data(batch_size, cid=0, num_clients=2, distributor_id=None):
 
 
 def train(net, trainloader, lr):
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(net.parameters(), lr=lr)
+    """Entrena localmente el modelo de regresión."""
+
+    criterion = nn.MSELoss()
+    optimizer = optim.SGD(net.parameters(), lr=float(lr), momentum=0.9)
 
     net.train()
 
     for _ in range(5):
-        for features, labels in trainloader:
+        for features, targets in trainloader:
             optimizer.zero_grad()
 
-            outputs = net(features)
-            loss = criterion(outputs, labels)
+            predictions = net(features)
+            loss = criterion(predictions, targets)
 
             loss.backward()
+            # Evita gradientes excesivos cuando se selecciona un learning rate alto.
+            torch.nn.utils.clip_grad_norm_(net.parameters(), max_norm=10.0)
             optimizer.step()
 
 
 def test(net, testloader):
-    criterion = nn.CrossEntropyLoss()
+    """Evalúa MAE, MSE, RMSE, R² y retrasos medios."""
 
+    criterion = nn.MSELoss(reduction="sum")
     net.eval()
 
-    total_loss = 0.0
-    num_batches = 0
-
+    total_squared_error = 0.0
+    total_examples = 0
     y_true = []
     y_pred = []
 
     with torch.no_grad():
-        for features, labels in testloader:
-            outputs = net(features)
+        for features, targets in testloader:
+            predictions = net(features)
 
-            loss = criterion(outputs, labels)
-            total_loss += loss.item()
+            total_squared_error += criterion(predictions, targets).item()
+            total_examples += targets.size(0)
 
-            predictions = outputs.argmax(dim=1)
+            y_true.extend(targets.cpu().numpy().tolist())
+            y_pred.extend(predictions.cpu().numpy().tolist())
 
-            y_true.extend(labels.cpu().numpy())
-            y_pred.extend(predictions.cpu().numpy())
+    if total_examples == 0:
+        raise ValueError("El conjunto de prueba está vacío.")
 
-            num_batches += 1
+    y_true = np.asarray(y_true, dtype=np.float64)
+    y_pred = np.asarray(y_pred, dtype=np.float64)
 
-    y_true = np.array(y_true)
-    y_pred = np.array(y_pred)
-
-    avg_loss = total_loss / max(num_batches, 1)
-
-    accuracy = accuracy_score(y_true, y_pred)
-    mae = mean_absolute_error(y_true, y_pred)
     mse = mean_squared_error(y_true, y_pred)
-    rmse = np.sqrt(mse)
+    mae = mean_absolute_error(y_true, y_pred)
+    rmse = float(np.sqrt(mse))
 
-    try:
-        r2 = r2_score(y_true, y_pred)
-    except Exception:
+    # R² puede no estar definido si el conjunto de prueba tiene menos de dos
+    # muestras o si todos los valores reales son iguales.
+    if len(y_true) >= 2 and not np.allclose(y_true, y_true[0]):
+        r2 = float(r2_score(y_true, y_pred))
+    else:
         r2 = 0.0
 
-    puntual_real_medio = float(np.mean(y_true))
-    puntual_predicho_medio = float(np.mean(y_pred))
+    retraso_real_medio = float(np.mean(y_true))
+    retraso_predicho_medio = float(np.mean(y_pred))
+    sesgo_medio = retraso_predicho_medio - retraso_real_medio
+    diferencia_media = abs(sesgo_medio)
 
-    diferencia_media = abs(
-        puntual_real_medio - puntual_predicho_medio
-    )
+    avg_loss = total_squared_error / total_examples
 
-    return float(avg_loss), float(accuracy), len(y_true), {
-        "accuracy": float(accuracy),
+    # El segundo valor se conserva por compatibilidad con la interfaz existente.
+    return float(avg_loss), float(r2), int(total_examples), {
         "mae": float(mae),
         "mse": float(mse),
         "rmse": float(rmse),
         "r2": float(r2),
-
-        # Se mantienen estos nombres para que tu dashboard los pueda reutilizar
-        "retraso_real_medio": puntual_real_medio,
-        "retraso_predicho_medio": puntual_predicho_medio,
+        "retraso_real_medio": retraso_real_medio,
+        "retraso_predicho_medio": retraso_predicho_medio,
         "diferencia_media": float(diferencia_media),
+        # Positivo: sobreestima el retraso. Negativo: lo infraestima.
+        "sesgo_medio": float(sesgo_medio),
     }

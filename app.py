@@ -3,6 +3,7 @@ import streamlit as st
 import subprocess
 import json
 import pandas as pd
+import numpy as np
 import os
 import plotly.express as px
 import glob
@@ -47,24 +48,25 @@ if st.session_state.server_app_process is not None:
     else:
         st.session_state.server_app_process = None
 
-ALL_METRICS = ["loss", "accuracy", "mae", "rmse", "r2"]
+ALL_METRICS = ["loss", "accuracy", "mae", "mse", "rmse", "r2"]
 METRICAS_PREDETERMINADAS = {
     "task_mnist": ["loss", "accuracy"],
     "task_noIID_mnist": ["loss", "accuracy"],
     "task_logistica": ["mae", "rmse", "r2"],
-    "task_regresion_logistica": ["loss", "accuracy"],
+    "task_regresion_logistica": ["mae", "rmse", "r2"],
 }
 METRICAS_DISPONIBLES = {
-    "task_mnist": {"loss", "accuracy","rmse", "r2"},
+    "task_mnist": {"loss", "accuracy", "rmse", "r2"},
     "task_noIID_mnist": {"loss", "accuracy"},
-    "task_logistica": {"loss", "mae", "rmse", "r2"},
-    "task_regresion_logistica": {"loss", "accuracy","rmse", "r2"},
+    "task_logistica": {"loss", "mae", "mse", "rmse", "r2"},
+    "task_regresion_logistica": {"loss", "mae", "mse", "rmse", "r2"},
 }
 
 CONFIG_METRICAS = {
     "loss": {"nombre": "Loss", "kpi": "Pérdida global (Loss)", "titulo": "📉 Evolución de la pérdida", "formato": ".4f", "delta_color": "inverse", "color": "#ff4b4b"},
     "accuracy": {"nombre": "Accuracy", "kpi": "Precisión global", "titulo": "🎯 Evolución de la precisión", "formato": ".2%", "delta_color": "normal", "color": "#21c354"},
     "mae": {"nombre": "MAE", "kpi": "MAE medio", "titulo": "📉 Evolución del MAE", "formato": ".2f", "sufijo": " min", "delta_color": "inverse", "color": "#ff4b4b"},
+    "mse": {"nombre": "MSE", "kpi": "MSE medio", "titulo": "📉 Evolución del MSE", "formato": ".2f", "sufijo": " min²", "delta_color": "inverse", "color": "#7b2cbf"},
     "rmse": {"nombre": "RMSE", "kpi": "RMSE medio", "titulo": "📊 Evolución del RMSE", "formato": ".2f", "sufijo": " min", "delta_color": "inverse", "color": "#ff9f1c"},
     "r2": {"nombre": "R²", "kpi": "R² global", "titulo": "🎯 Evolución del R²", "formato": ".4f", "delta_color": "normal", "color": "#21c354"},
 }
@@ -110,11 +112,19 @@ with st.sidebar:
     
     tarea = st.selectbox("Tarea a ejecutar", nombres_tarea, key="task_select")
     
-    st.subheader("Measuring Metrics")
+    st.subheader("Métricas a mostrar")
     selected_metrics = []
     predeterminadas = METRICAS_PREDETERMINADAS.get(tarea, ["loss", "accuracy"])
+    disponibles = METRICAS_DISPONIBLES.get(tarea, set(ALL_METRICS))
+
     for m in ALL_METRICS:
-        marcada = st.checkbox(CONFIG_METRICAS[m]["nombre"], value=(m in predeterminadas), key=f"chk_{m}")
+        if m not in disponibles:
+            continue
+        marcada = st.checkbox(
+            CONFIG_METRICAS[m]["nombre"],
+            value=(m in predeterminadas),
+            key=f"chk_{tarea}_{m}",
+        )
         if marcada:
             selected_metrics.append(m)
 
@@ -125,31 +135,21 @@ with st.sidebar:
     selected_distributors = []
     distributor_selection_valid = True
 
-    if tarea == "task_logistica":
+    if tarea in ["task_logistica", "task_regresion_logistica"]:
         data_distribution = "No-IID real"
 
         selected_distributors = st.multiselect(
             "Distribuidores a comparar",
             [1, 2, 3, 4],
             default=[1, 2],
-            format_func=lambda x: f"Distribuidor {x}"
+            format_func=lambda x: f"Distribuidor {x}",
         )
 
         min_clients = len(selected_distributors)
         distributor_selection_valid = 2 <= min_clients <= 4
 
-    elif tarea == "task_regresion_logistica":
-        data_distribution = "No-IID real"
-
-        min_clients = st.selectbox(
-            "Clientes esperados",
-            [2, 3, 4],
-            index=0
-        )
-
-        selected_distributors = list(range(1, min_clients + 1))
-        distributor_selection_valid = True
-
+        if not distributor_selection_valid:
+            st.warning("Selecciona entre 2 y 4 distribuidores.")
     else:
         min_clients = st.selectbox("Clientes esperados", [2, 3, 4], index=0)
         data_distribution = "No-IID" if "noIID" in tarea else "IID"
@@ -247,27 +247,448 @@ if stop_button and st.session_state.server_app_process is not None:
 # --- ÁREA PRINCIPAL ---
 st.subheader("📊 Métricas del Entrenamiento")
 
+
+def _convertir_columnas_numericas(df, columnas):
+    for columna in columnas:
+        if columna in df.columns:
+            df[columna] = pd.to_numeric(df[columna], errors="coerce")
+    return df
+
+
+def _fila_optima(df, metrica, maximizar=False):
+    if metrica not in df.columns:
+        return None
+    df_valido = df.dropna(subset=[metrica])
+    if df_valido.empty:
+        return None
+    indice = df_valido[metrica].idxmax() if maximizar else df_valido[metrica].idxmin()
+    return df_valido.loc[indice]
+
+
+def dibujar_resultados_distribuidores(data):
+    historial = data.get("distribuidores", [])
+    if not historial:
+        return
+
+    filas = []
+    for resultado_ronda in historial:
+        ronda = resultado_ronda.get("round")
+        for resultado in resultado_ronda.get("resultados", []):
+            fila = dict(resultado)
+            fila["round"] = ronda
+            filas.append(fila)
+
+    if not filas:
+        return
+
+    df_hist = pd.DataFrame(filas)
+    columnas_numericas = [
+        "round",
+        "distribuidor",
+        "num_examples",
+        "mae",
+        "mse",
+        "rmse",
+        "r2",
+        "retraso_real_medio",
+        "retraso_predicho_medio",
+        "diferencia_media",
+        "sesgo_medio",
+    ]
+    df_hist = _convertir_columnas_numericas(df_hist, columnas_numericas)
+    df_hist = df_hist.dropna(subset=["round", "distribuidor"])
+
+    if df_hist.empty:
+        return
+
+    df_hist["Distribuidor"] = df_hist["distribuidor"].astype(int).map(
+        lambda value: f"Distribuidor {value}"
+    )
+
+    ultima_ronda = int(df_hist["round"].max())
+    df_final = (
+        df_hist[df_hist["round"] == ultima_ronda]
+        .sort_values("distribuidor")
+        .copy()
+    )
+
+    if df_final.empty:
+        return
+
+    # El sesgo se puede reconstruir aunque proceda de un metrics.json anterior.
+    if {
+        "retraso_real_medio",
+        "retraso_predicho_medio",
+    }.issubset(df_final.columns):
+        sesgo_calculado = (
+            df_final["retraso_predicho_medio"]
+            - df_final["retraso_real_medio"]
+        )
+        if "sesgo_medio" not in df_final.columns:
+            df_final["sesgo_medio"] = sesgo_calculado
+        else:
+            df_final["sesgo_medio"] = df_final["sesgo_medio"].fillna(
+                sesgo_calculado
+            )
+
+        if "diferencia_media" not in df_final.columns:
+            df_final["diferencia_media"] = sesgo_calculado.abs()
+        else:
+            df_final["diferencia_media"] = df_final[
+                "diferencia_media"
+            ].fillna(sesgo_calculado.abs())
+
+    if {"mae", "rmse"}.issubset(df_final.columns):
+        df_final["brecha_rmse_mae"] = df_final["rmse"] - df_final["mae"]
+
+    st.divider()
+    st.subheader(f"🚚 Comparativa por distribuidor · ronda {ultima_ronda}")
+
+    mejor_mae = _fila_optima(df_final, "mae")
+    mejor_rmse = _fila_optima(df_final, "rmse")
+    mejor_r2 = _fila_optima(df_final, "r2", maximizar=True)
+    mejor_diferencia = _fila_optima(df_final, "diferencia_media")
+
+    columnas_kpi = st.columns(4)
+    if mejor_mae is not None:
+        columnas_kpi[0].metric(
+            "Menor MAE",
+            f"{mejor_mae['mae']:.2f} min",
+            mejor_mae["Distribuidor"],
+            delta_color="off",
+        )
+    if mejor_rmse is not None:
+        columnas_kpi[1].metric(
+            "Menor RMSE",
+            f"{mejor_rmse['rmse']:.2f} min",
+            mejor_rmse["Distribuidor"],
+            delta_color="off",
+        )
+    if mejor_r2 is not None:
+        columnas_kpi[2].metric(
+            "Mayor R²",
+            f"{mejor_r2['r2']:.4f}",
+            mejor_r2["Distribuidor"],
+            delta_color="off",
+        )
+    if mejor_diferencia is not None:
+        columnas_kpi[3].metric(
+            "Menor diferencia media",
+            f"{mejor_diferencia['diferencia_media']:.2f} min",
+            mejor_diferencia["Distribuidor"],
+            delta_color="off",
+        )
+
+    tab_resumen, tab_retrasos, tab_evolucion, tab_tabla = st.tabs(
+        [
+            "Comparación de errores",
+            "Retraso real y predicho",
+            "Evolución por rondas",
+            "Tabla completa",
+        ]
+    )
+
+    with tab_resumen:
+        col_errores, col_r2 = st.columns(2)
+
+        metricas_error = [
+            metrica
+            for metrica in ["mae", "rmse"]
+            if metrica in df_final.columns
+            and not df_final[metrica].dropna().empty
+        ]
+        if metricas_error:
+            df_errores = df_final.melt(
+                id_vars=["Distribuidor"],
+                value_vars=metricas_error,
+                var_name="Métrica",
+                value_name="Minutos",
+            )
+            df_errores["Métrica"] = df_errores["Métrica"].str.upper()
+            fig_errores = px.bar(
+                df_errores,
+                x="Distribuidor",
+                y="Minutos",
+                color="Métrica",
+                barmode="group",
+                title="MAE y RMSE por distribuidor",
+                template="plotly_white",
+                text_auto=".2f",
+            )
+            fig_errores.update_layout(yaxis_title="Error (minutos)")
+            col_errores.plotly_chart(
+                fig_errores,
+                width="stretch",
+                key="dist_errores_finales",
+            )
+
+        if "r2" in df_final.columns and not df_final["r2"].dropna().empty:
+            fig_r2 = px.bar(
+                df_final,
+                x="Distribuidor",
+                y="r2",
+                title="R² por distribuidor",
+                template="plotly_white",
+                text_auto=".4f",
+            )
+            fig_r2.add_hline(y=0, line_dash="dash")
+            fig_r2.update_layout(yaxis_title="R²")
+            col_r2.plotly_chart(fig_r2, width="stretch", key="dist_r2_final")
+            col_r2.caption(
+                "Un R² cercano a 1 indica mejor ajuste; un valor negativo "
+                "indica que el modelo rinde peor que predecir la media."
+            )
+
+        if (
+            "brecha_rmse_mae" in df_final.columns
+            and not df_final["brecha_rmse_mae"].dropna().empty
+        ):
+            fig_brecha = px.bar(
+                df_final,
+                x="Distribuidor",
+                y="brecha_rmse_mae",
+                title="Diferencia entre RMSE y MAE",
+                template="plotly_white",
+                text_auto=".2f",
+            )
+            fig_brecha.update_layout(
+                yaxis_title="RMSE − MAE (minutos)"
+            )
+            st.plotly_chart(fig_brecha, width="stretch", key="dist_brecha")
+            st.caption(
+                "Una brecha grande entre RMSE y MAE suele indicar que existen "
+                "algunos errores especialmente altos."
+            )
+
+    with tab_retrasos:
+        columnas_medias = [
+            columna
+            for columna in [
+                "retraso_real_medio",
+                "retraso_predicho_medio",
+            ]
+            if columna in df_final.columns
+            and not df_final[columna].dropna().empty
+        ]
+
+        if len(columnas_medias) == 2:
+            nombres_medias = {
+                "retraso_real_medio": "Retraso real medio",
+                "retraso_predicho_medio": "Retraso predicho medio",
+            }
+            df_medias = df_final.melt(
+                id_vars=["Distribuidor"],
+                value_vars=columnas_medias,
+                var_name="Tipo",
+                value_name="Minutos",
+            )
+            df_medias["Tipo"] = df_medias["Tipo"].map(nombres_medias)
+
+            fig_medias = px.bar(
+                df_medias,
+                x="Distribuidor",
+                y="Minutos",
+                color="Tipo",
+                barmode="group",
+                title="Retraso real medio frente al predicho",
+                template="plotly_white",
+                text_auto=".2f",
+            )
+            st.plotly_chart(fig_medias, width="stretch", key="dist_medias")
+
+            col_diferencia, col_sesgo = st.columns(2)
+
+            if "diferencia_media" in df_final.columns:
+                fig_diferencia = px.bar(
+                    df_final,
+                    x="Distribuidor",
+                    y="diferencia_media",
+                    title="Diferencia absoluta entre las medias",
+                    template="plotly_white",
+                    text_auto=".2f",
+                )
+                fig_diferencia.update_layout(yaxis_title="Diferencia (minutos)")
+                col_diferencia.plotly_chart(
+                    fig_diferencia,
+                    width="stretch",
+                    key="dist_diferencia_media",
+                )
+
+            if "sesgo_medio" in df_final.columns:
+                fig_sesgo = px.bar(
+                    df_final,
+                    x="Distribuidor",
+                    y="sesgo_medio",
+                    title="Sesgo medio de la predicción",
+                    template="plotly_white",
+                    text_auto=".2f",
+                )
+                fig_sesgo.add_hline(y=0, line_dash="dash")
+                fig_sesgo.update_layout(yaxis_title="Predicho − real (minutos)")
+                col_sesgo.plotly_chart(
+                    fig_sesgo,
+                    width="stretch",
+                    key="dist_sesgo_medio",
+                )
+                col_sesgo.caption(
+                    "Valor positivo: el modelo sobreestima el retraso. "
+                    "Valor negativo: lo infraestima."
+                )
+
+            fig_dispersion = px.scatter(
+                df_final,
+                x="retraso_real_medio",
+                y="retraso_predicho_medio",
+                text="Distribuidor",
+                title="Correspondencia entre retraso real y predicho",
+                template="plotly_white",
+            )
+            valores = pd.concat(
+                [
+                    df_final["retraso_real_medio"],
+                    df_final["retraso_predicho_medio"],
+                ]
+            ).dropna()
+            if not valores.empty:
+                minimo = float(valores.min())
+                maximo = float(valores.max())
+                margen = max((maximo - minimo) * 0.1, 1.0)
+                fig_dispersion.add_shape(
+                    type="line",
+                    x0=minimo - margen,
+                    y0=minimo - margen,
+                    x1=maximo + margen,
+                    y1=maximo + margen,
+                    line=dict(dash="dash"),
+                )
+            fig_dispersion.update_traces(textposition="top center")
+            fig_dispersion.update_layout(
+                xaxis_title="Retraso real medio (min)",
+                yaxis_title="Retraso predicho medio (min)",
+            )
+            st.plotly_chart(
+                fig_dispersion,
+                width="stretch",
+                key="dist_real_predicho_scatter",
+            )
+            st.caption(
+                "Cuanto más cerca esté cada distribuidor de la diagonal, "
+                "más próxima es su media predicha a la real."
+            )
+
+    with tab_evolucion:
+        if df_hist["round"].nunique() < 2:
+            st.info("Se necesitan al menos dos rondas para mostrar la evolución.")
+        else:
+            metricas_evolucion = [
+                ("mae", "Evolución del MAE", "MAE (minutos)"),
+                ("rmse", "Evolución del RMSE", "RMSE (minutos)"),
+                ("r2", "Evolución del R²", "R²"),
+                (
+                    "diferencia_media",
+                    "Evolución de la diferencia media",
+                    "Diferencia (minutos)",
+                ),
+            ]
+
+            for indice in range(0, len(metricas_evolucion), 2):
+                columnas = st.columns(2)
+                for columna_ui, (metrica, titulo, eje_y) in zip(
+                    columnas,
+                    metricas_evolucion[indice:indice + 2],
+                ):
+                    if (
+                        metrica not in df_hist.columns
+                        or df_hist[metrica].dropna().empty
+                    ):
+                        continue
+                    fig_evolucion = px.line(
+                        df_hist.dropna(subset=[metrica]),
+                        x="round",
+                        y=metrica,
+                        color="Distribuidor",
+                        markers=True,
+                        title=titulo,
+                        template="plotly_white",
+                    )
+                    if metrica == "r2":
+                        fig_evolucion.add_hline(y=0, line_dash="dash")
+                    fig_evolucion.update_layout(
+                        xaxis_title="Ronda",
+                        yaxis_title=eje_y,
+                    )
+                    columna_ui.plotly_chart(
+                        fig_evolucion,
+                        width="stretch",
+                        key=f"evolucion_dist_{metrica}",
+                    )
+
+    with tab_tabla:
+        nombres_columnas = {
+            "Distribuidor": "Distribuidor",
+            "num_examples": "Ejemplos de test",
+            "mae": "MAE (min)",
+            "mse": "MSE (min²)",
+            "rmse": "RMSE (min)",
+            "r2": "R²",
+            "retraso_real_medio": "Retraso real medio (min)",
+            "retraso_predicho_medio": "Retraso predicho medio (min)",
+            "diferencia_media": "Diferencia absoluta (min)",
+            "sesgo_medio": "Sesgo predicho-real (min)",
+        }
+        columnas_tabla = [
+            columna
+            for columna in nombres_columnas
+            if columna in df_final.columns
+        ]
+        tabla = df_final[columnas_tabla].rename(columns=nombres_columnas)
+        formatos = {
+            columna: "{:.2f}"
+            for columna in tabla.columns
+            if columna not in ["Distribuidor", "Ejemplos de test", "R²"]
+        }
+        if "R²" in tabla.columns:
+            formatos["R²"] = "{:.4f}"
+        st.dataframe(
+            tabla.style.format(formatos, na_rep="—"),
+            width="stretch",
+            hide_index=True,
+        )
+
+
 def dibujar_dashboard():
     ruta_metrics = os.path.abspath("metrics.json")
     if not os.path.exists(ruta_metrics):
-        st.info("No hay métricas registradas. ¡Inicia un entrenamiento cuando el SuperLink esté activo!")
+        st.info(
+            "No hay métricas registradas. Inicia un entrenamiento cuando "
+            "el SuperLink esté activo."
+        )
         return
 
     try:
         with open(ruta_metrics, "r", encoding="utf-8") as f:
             data = json.load(f)
-    except:
+    except (OSError, json.JSONDecodeError):
+        st.warning("No se pudo leer metrics.json.")
         return
 
     rondas = data.get("round", [])
     if not rondas:
         return
 
-    df = pd.DataFrame({k: v for k, v in data.items() if isinstance(v, list) and len(v) == len(rondas)})
+    columnas_globales = ["round", "time"] + ALL_METRICS
+    df_data = {
+        columna: data[columna]
+        for columna in columnas_globales
+        if isinstance(data.get(columna), list)
+        and len(data[columna]) == len(rondas)
+    }
+    df = pd.DataFrame(df_data)
 
     metricas_validas = [
-        m for m in selected_metrics
-        if m in df.columns and not df.dropna(subset=[m]).empty
+        metrica
+        for metrica in selected_metrics
+        if metrica in df.columns and not df.dropna(subset=[metrica]).empty
     ]
 
     for i in range(0, len(metricas_validas), 2):
@@ -275,8 +696,8 @@ def dibujar_dashboard():
 
         for col, metrica in zip(columnas_kpis, metricas_validas[i:i + 2]):
             df_m = df.dropna(subset=[metrica])
-            val = df_m[metrica].iloc[-1]
-            prev = df_m[metrica].iloc[-2] if len(df_m) > 1 else val
+            val = float(df_m[metrica].iloc[-1])
+            prev = float(df_m[metrica].iloc[-2]) if len(df_m) > 1 else val
             delta = val - prev
             config = CONFIG_METRICAS[metrica]
 
@@ -287,29 +708,34 @@ def dibujar_dashboard():
                 label=config["kpi"],
                 value=texto_val,
                 delta=texto_del,
-                delta_color=config["delta_color"]
+                delta_color=config["delta_color"],
             )
 
     for metrica in selected_metrics:
-        if metrica in df.columns:
-            df_m = df.dropna(subset=[metrica])
-            if not df_m.empty:
-                config = CONFIG_METRICAS[metrica]
-                fig = px.line(df_m, x="round", y=metrica, markers=True, title=config["titulo"], template="plotly_white")
-                fig.update_traces(line=dict(width=3, color=config["color"]), marker=dict(size=8))
-                fig.update_layout(uirevision="constant")
-                st.plotly_chart(fig, width='stretch', key=f"chart_{metrica}")
+        if metrica not in df.columns:
+            continue
+        df_m = df.dropna(subset=[metrica])
+        if df_m.empty:
+            continue
 
-    if data.get("task") == "task_logistica" and data.get("distribuidores"):
-        historial = data["distribuidores"]
-        if historial:
-            resultados = historial[-1].get("resultados", [])
-            if resultados:
-                st.divider()
-                st.subheader("🚚 Resultados por distribuidor")
-                df_dist = pd.DataFrame(resultados)
-                st.dataframe(df_dist, width='stretch', hide_index=True)
-    
+        config = CONFIG_METRICAS[metrica]
+        fig = px.line(
+            df_m,
+            x="round",
+            y=metrica,
+            markers=True,
+            title=config["titulo"],
+            template="plotly_white",
+        )
+        fig.update_traces(
+            line=dict(width=3, color=config["color"]),
+            marker=dict(size=8),
+        )
+        fig.update_layout(uirevision="constant", xaxis_title="Ronda")
+        st.plotly_chart(fig, width="stretch", key=f"chart_{metrica}")
+
+    if data.get("task") in ["task_logistica", "task_regresion_logistica"]:
+        dibujar_resultados_distribuidores(data)
 
 if entrenamiento_en_curso:
     @st.fragment(run_every="1s")
@@ -338,7 +764,10 @@ if start_button:
         os.remove(ruta_txt_parada)
 
     if not usar_checkpoints:
-        checkpoints_viejos = glob.glob(os.path.join("checkpoint", "checkpoint_round_*.npz"))
+        checkpoints_viejos = glob.glob(
+            os.path.join("checkpoint", "**", "checkpoint_round_*.npz"),
+            recursive=True,
+        )
         for f_old in checkpoints_viejos:
             try: os.remove(f_old)
             except: pass
