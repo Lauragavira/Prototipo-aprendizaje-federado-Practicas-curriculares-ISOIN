@@ -10,7 +10,7 @@ from flwr.app import Context
 
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
-DEFAULT_TASK = "task_regresion_logistica"
+DEFAULT_TASK = "task_regresion"
 
 def get_requested_task_name(config=None):
     """Obtiene la tarea desde la configuración enviada por el servidor.
@@ -139,7 +139,7 @@ class GenericFlowerClient(fl.client.NumPyClient):
             "num_clients": num_clients,
         }
 
-        if self.task_name in ["task_logistica", "task_regresion_logistica"]:
+        if self.task_name in ["task_logistica", "task_regresion"]:
             load_kwargs["distributor_id"] = self.get_distributor_id(
                 config
             )
@@ -233,7 +233,7 @@ class GenericFlowerClient(fl.client.NumPyClient):
 
         # Estas métricas auxiliares se envían siempre en logística.
         # El servidor las guarda por distribuidor y no las agrega globalmente.
-        if self.task_name in ["task_logistica", "task_regresion_logistica"]:
+        if self.task_name in ["task_logistica", "task_regresion"]:
             actual_distributor_id = self.get_distributor_id(config)
             metrics_to_send["distribuidor_id"] = float(
                 actual_distributor_id
