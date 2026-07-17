@@ -80,7 +80,7 @@ with st.sidebar:
     st.info(
         f"**Comando de conexión:**\n\n"
         f"```bash\n"
-        f"flwr-supernode --insecure --superlink {ip_servidor}:9092\n"
+        f"flower-supernode --insecure --superlink {ip_servidor}:9092\n"
         f"```"
     )
     st.divider()
