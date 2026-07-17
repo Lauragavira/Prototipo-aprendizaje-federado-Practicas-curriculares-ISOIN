@@ -35,7 +35,7 @@ El caso de uso logístico predice directamente los **minutos de retraso** (`retr
 | `client.py` | Carga dinámica de tareas, asignación de distribuidores, entrenamiento y evaluación local. |
 | `task/task_mnist.py` | Clasificación MNIST con distribución IID. |
 | `task/task_noIID_mnist.py` | Clasificación MNIST con distribución No-IID. |
-| `task/task_regresion_logistica.py` | Regresión de `retraso_min`. |
+| `task/task_regresion.py` | Regresión de `retraso_min`. |
 | `distribuidores/` | Cuatro CSV logísticos de ejemplo. |
 | `pyproject.toml` | Dependencias y componentes de la Flower App. |
 
@@ -57,7 +57,7 @@ El caso de uso logístico predice directamente los **minutos de retraso** (`retr
 │   ├── __init__.py
 │   ├── task_mnist.py
 │   ├── task_noIID_mnist.py
-│   └── task_regresion_logistica.py
+│   └── task_regresion.py
 └── checkpoint/
 ```
 
