@@ -53,13 +53,13 @@ METRICAS_PREDETERMINADAS = {
     "task_mnist": ["loss", "accuracy"],
     "task_noIID_mnist": ["loss", "accuracy"],
     "task_logistica": ["mae", "rmse", "r2"],
-    "task_regresion_logistica": ["mae", "rmse", "r2"],
+    "task_regresion": ["mae", "rmse", "r2"],
 }
 METRICAS_DISPONIBLES = {
     "task_mnist": {"loss", "accuracy", "rmse", "r2"},
     "task_noIID_mnist": {"loss", "accuracy"},
     "task_logistica": {"loss", "mae", "mse", "rmse", "r2"},
-    "task_regresion_logistica": {"loss", "mae", "mse", "rmse", "r2"},
+    "task_regresion": {"loss", "mae", "mse", "rmse", "r2"},
 }
 
 CONFIG_METRICAS = {
@@ -135,7 +135,7 @@ with st.sidebar:
     selected_distributors = []
     distributor_selection_valid = True
 
-    if tarea in ["task_logistica", "task_regresion_logistica"]:
+    if tarea in ["task_logistica", "task_regresion"]:
         data_distribution = "No-IID real"
 
         selected_distributors = st.multiselect(
@@ -734,7 +734,7 @@ def dibujar_dashboard():
         fig.update_layout(uirevision="constant", xaxis_title="Ronda")
         st.plotly_chart(fig, width="stretch", key=f"chart_{metrica}")
 
-    if data.get("task") in ["task_logistica", "task_regresion_logistica"]:
+    if data.get("task") in ["task_logistica", "task_regresion"]:
         dibujar_resultados_distribuidores(data)
 
 if entrenamiento_en_curso:
