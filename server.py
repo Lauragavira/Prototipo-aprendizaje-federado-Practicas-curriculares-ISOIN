@@ -33,7 +33,7 @@ TASK_NAME = args.get("task", os.environ.get("FLWR_TASK_NAME", "task_mnist"))
 DISTRIBUTOR_METRICS = ["mae", "mse", "rmse", "r2", "retraso_real_medio", "retraso_predicho_medio", "diferencia_media", "sesgo_medio"]
 
 def parse_selected_distributors():
-    if TASK_NAME not in ["task_logistica", "task_regresion_logistica"]:
+    if TASK_NAME not in ["task_logistica", "task_regresion"]:
         return []
     raw_distributors = args.get("selected_distributors", [])
     try:
@@ -44,7 +44,7 @@ def parse_selected_distributors():
 SELECTED_DISTRIBUTORS = parse_selected_distributors()
 NUM_CLIENTS = (
     len(SELECTED_DISTRIBUTORS)
-    if TASK_NAME in ["task_logistica", "task_regresion_logistica"] and SELECTED_DISTRIBUTORS
+    if TASK_NAME in ["task_logistica", "task_regresion"] and SELECTED_DISTRIBUTORS
     else int(args.get("min_clients", 2))
 )
 
@@ -105,7 +105,7 @@ def safe_float(value):
     except (TypeError, ValueError): return None
 
 def extract_distributor_results(server_round, results):
-    if TASK_NAME not in ["task_logistica", "task_regresion_logistica"]:
+    if TASK_NAME not in ["task_logistica", "task_regresion"]:
         return None
     distributor_results = []
     for pos, (_, eval_res) in enumerate(results, start=1):
