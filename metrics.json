@@ -1,5 +1,5 @@
 {
-  "task": "task_regresion_logistica",
+  "task": "task_regresion",
   "selected_metrics": [
     "loss",
     "mae",
